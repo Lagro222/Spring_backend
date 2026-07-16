@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 // import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -33,7 +35,12 @@ public class Artist{
  private String genre;
  private String country;
 
-@ManyToMany(mappedBy = "albums")
+@ManyToMany
+@JoinTable(
+  name = "artist_album",
+  joinColumns = @JoinColumn(name = "id_artist"  ),
+  inverseJoinColumns = @JoinColumn(name = "id_album")
+)
 @JsonIgnore
  List<Album> albums = new ArrayList<>(); 
   
