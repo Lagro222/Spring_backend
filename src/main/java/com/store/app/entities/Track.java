@@ -40,5 +40,7 @@ public class Track {
 
  @ManyToMany(mappedBy = "liked")
  private List<User> users_liked = new ArrayList<>();
-  
+
+ @ManyToMany(mappedBy = "playlist_tracks")
+ private List<Playlist> playlists;
 }
