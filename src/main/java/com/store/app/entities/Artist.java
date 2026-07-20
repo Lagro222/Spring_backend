@@ -43,5 +43,12 @@ public class Artist{
 )
 @JsonIgnore
  List<Album> albums = new ArrayList<>(); 
-  
+ 
+@ManyToMany
+@JoinTable(
+  name = "artist_track",
+  joinColumns = "id_artist",
+  inverseJoinColumns = "id_track"  
+)
+List<Track> tracks = new ArrayList<>();
 }
