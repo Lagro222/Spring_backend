@@ -34,7 +34,4 @@ public class Playlist {
   
 }
 
-public enum PlaylistType{
-  GLOBAL,
-  USER
-}
+
