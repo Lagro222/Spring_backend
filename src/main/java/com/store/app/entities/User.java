@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -29,8 +30,8 @@ public class User {
   @ManyToMany
   @JoinTable(
     name = "user_track",
-    joinColumns = "id_user",
-    inverseJoinColumns = "id_track"
+    joinColumns = @JoinColumn(name = "id_user"),
+    inverseJoinColumns = @JoinColumn(name = "id_track")
   )
   private List<Track> liked = new ArrayList<>();
   

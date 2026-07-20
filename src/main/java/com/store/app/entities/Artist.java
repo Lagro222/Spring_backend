@@ -47,8 +47,9 @@ public class Artist{
 @ManyToMany
 @JoinTable(
   name = "artist_track",
-  joinColumns = "id_artist",
-  inverseJoinColumns = "id_track"  
+  joinColumns = @JoinColumn(name = "id_artist"),
+  inverseJoinColumns = @JoinColumn( name = "id_track") 
 )
+@JsonIgnore
 List<Track> tracks = new ArrayList<>();
 }
