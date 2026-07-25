@@ -12,6 +12,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,9 +33,11 @@ public class Album {
   private Integer releaseYear;
 
   @ManyToMany(mappedBy = "albums")
+  @JsonIgnore
   private List<Artist> artists = new ArrayList<>();
 
   @OneToMany(mappedBy = "album")
+  @JsonIgnore
   private List<Track> tracks = new ArrayList<>();
 
   
