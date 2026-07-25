@@ -29,6 +29,7 @@ public class Track {
   private Long id_track;
 
   private String title;
+  private String file_path;
   private Integer realease_date;
 
   @ManyToOne
