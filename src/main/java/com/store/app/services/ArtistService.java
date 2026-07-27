@@ -1,0 +1,37 @@
+package  com.store.app.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.store.app.DTOs.ArtistDTO.ArtistRequestDTO;
+import com.store.app.entities.Artist;
+import com.store.app.repositories.ArtistRepository;
+
+/**
+ * ArtistService
+ */
+@Service
+public class ArtistService {
+
+ @Autowired
+ private ArtistRepository artist_repo ;
+
+ public List<Artist> getAll(){return artist_repo.findAll();}
+
+ public Artist getById(Long id ){return artist_repo.findById(id).orElseThrow(new RuntimeException("no such artist!!"));}
+ public List<Artist> getByName(String name){return artist_repo.findByName(name);}
+
+ public Artist create_artist(ArtistRequestDTO artist){
+   Artist new_artist = new Artist();
+
+   new_artist.setName(artist.name());
+   new_artist.setGenre(artist.genre());
+   new_artist.setCountry(artist.country());
+
+   return artist_repo.save(new_artist);
+ }
+
+
+}
