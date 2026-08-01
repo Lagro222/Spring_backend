@@ -28,9 +28,9 @@ public class AlbumService {
     return album_repo.save(album);
   } 
 
-  public Album update(Album album){
+  public Album update( Long id,Album album){
 
-    Album exist = album_repo.findById(album.getId_album()).orElseThrow(()-> new RuntimeException("no such album // updating stoped."));
+    Album exist = album_repo.findById(id).orElseThrow(()-> new RuntimeException("no such album // updating stoped."));
 
     exist.setArtists(album.getArtists());
     exist.setReleaseYear(album.getReleaseYear());
