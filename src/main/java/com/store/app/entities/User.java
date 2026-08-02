@@ -38,5 +38,19 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "id_track")
   )
   private List<Track> liked = new ArrayList<>();
-  
+
+  //to avoid conflict for remove() function
+  @Override
+  public boolean equals(Object o){
+    if (this == o) return true;
+    if(!(o instanceof User)) return false;
+
+    User user = (User) o;
+    return id != null && id.equals(user.id_user);
+  }
+
+  @Override
+  public int hashcode(){
+    return getClass().hashCode();
+  }
 }
