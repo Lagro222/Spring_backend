@@ -26,7 +26,13 @@ public class PlaylistService {
   }
 
   public Playlist update_playlist(Long id,Playlist updated){
-    Playlist target_playlist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist !! updating failed"))
+    Playlist target_playlist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist !! updating failed"));
+    target_playlist.setName(updated.getName());
+    target_playlist.setPlaylist_tracks(updated.getPlaylist_tracks());
+    target_playlist.setType(updated.getType());
+    target_playlist.setUser(updated.getUser());
+    
+    return playlist_repo.save(target_playlist);
   }
 
   public void delete_playlist(Long id){
