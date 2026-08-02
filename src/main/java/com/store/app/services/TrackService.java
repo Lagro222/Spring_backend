@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.app.entities.Album;
+import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
 import com.store.app.repositories.TrackRepository;
 
@@ -46,7 +47,7 @@ public class TrackService {
 
   public Track assignAlbum(Long trackId, Long albumId){
 
-    Track target_track = track_repository.findById(trackId).orElseThrow(()-> new RuntimeException("no such track "));
+    Track target_track = getById(trackId);
     Album target_album = album_service.getById(albumId);
 
     target_track.setAlbum(target_album);
@@ -54,11 +55,15 @@ public class TrackService {
     return track_repository.save(target_track);
   }
 
-  // public Track addArtist(Long trackId , Long artistId){
-  //   Track target_track = getById(trackId);
-  //
-  //
-  // }
+  public Track addArtist(Long trackId , Long artistId){
+    Track target_track = getById(trackId);
+    Artist target_artist = artist_service.getById(artistId);
+
+    target_track.getArtist().add(target_artist);
+
+    return track_repository.save(target_track);
+
+  }
 
   public void delete_track(Long id){
     
