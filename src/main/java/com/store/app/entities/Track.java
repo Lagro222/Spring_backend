@@ -3,7 +3,7 @@ package com.store.app.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Generated;
+// import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,5 +43,5 @@ public class Track {
  private List<User> users_liked = new ArrayList<>();
 
  @ManyToMany(mappedBy = "playlist_tracks")
- private List<Playlist> playlists;
+ private List<Playlist> playlists = new ArrayList<>();
 }
