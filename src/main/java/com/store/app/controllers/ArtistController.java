@@ -33,7 +33,7 @@ public class ArtistController {
   @GetMapping("/{id}")
   public Artist getById(@PathVariable Long id){return artist_service.getById(id);}
 
-  @GetMapping("/{name}")
+  @GetMapping("/search/{name}")
   public List<Artist> getByName(@PathVariable String name){return artist_service.getByName(name);}
 
   @PostMapping
