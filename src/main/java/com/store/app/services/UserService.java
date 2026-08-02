@@ -21,4 +21,22 @@ public class UserService {
   public List<User> getByName(String name){return user_repo.findByName(name);}
   public User getById(Long id){return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));}
 
+  public User create_user(User new_user){
+    return user_repo.save(new_user);
+  }
+  public User update_user(Long user_id, User updating){
+    
+    User target_user = getById(user_id);
+    target_user.setName(updating.getName());
+    target_user.setEmail(updating.getEmail());
+    target_user.setFirstname(updating.getFirstname());
+    
+    return user_repo.save(target_user);
+
+  }
+
+  public void delete_user(Long id){
+    User target_user = getById(id);
+    user_repo.delete(target_user);
+  }
 }
