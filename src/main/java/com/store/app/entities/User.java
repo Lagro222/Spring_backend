@@ -46,11 +46,11 @@ public class User {
     if(!(o instanceof User)) return false;
 
     User user = (User) o;
-    return id != null && id.equals(user.id_user);
+    return id_user != null && id_user.equals(user.id_user);
   }
 
   @Override
-  public int hashcode(){
+  public int hashCode(){
     return getClass().hashCode();
   }
 }
