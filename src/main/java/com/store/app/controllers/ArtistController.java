@@ -41,6 +41,11 @@ public class ArtistController {
     return artist_service.create_artist(artist);
   }
 
+  @PostMapping("/{artistId}/track/{trackId}")
+  public Artist addTrack(@PathVariable Long artistId, @PathVariable Long trackId) {
+    return artist_service.addTrack(artistId, trackId);
+  }
+
   @DeleteMapping("/{id}")
   public void delete(@PathVariable Long id){ artist_service.delete(id);}
 

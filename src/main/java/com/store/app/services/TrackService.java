@@ -24,7 +24,7 @@ public class TrackService {
 
   public final TrackRepository track_repository;
   public final AlbumService album_service;
-  public final ArtistService artist_service;
+  // public final ArtistService artist_service;
   public final UserService userService;
 
   //functions for GET
@@ -65,16 +65,16 @@ public class TrackService {
 
     return track_repository.save(target_track);
   }
-
-  public Track addArtist(Long trackId , Long artistId){
-    Track target_track = getById(trackId);
-    Artist target_artist = artist_service.getById(artistId);
-
-    target_track.getArtist().add(target_artist);
-
-    return track_repository.save(target_track);
-
-  }
+  //
+  // public Track addArtist(Long trackId , Long artistId){
+  //   Track target_track = getById(trackId);
+  //   Artist target_artist = artist_service.getById(artistId);
+  //
+  //   target_track.getArtist().add(target_artist);
+  //
+  //   return track_repository.save(target_track);
+  //
+  // }
 
   public Track likeTrack(Long trackId, Long userId){
     

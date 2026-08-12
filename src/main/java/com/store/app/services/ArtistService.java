@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.store.app.DTOs.ArtistDTO.ArtistRequestDTO;
 import com.store.app.entities.Artist;
+import com.store.app.entities.Track;
 import com.store.app.repositories.ArtistRepository;
 
 /**
@@ -17,6 +18,9 @@ public class ArtistService {
 
  @Autowired
  private ArtistRepository artist_repo ;
+
+ @Autowired
+ private TrackService track_service;
 
  public List<Artist> getAll(){return artist_repo.findAll();}
 
@@ -53,6 +57,13 @@ public class ArtistService {
    artist_repo.delete(target);
 
  }
+
+ public Artist addTrack(Long artistId, Long trackId) {
+    Artist artist = getById(artistId);
+    Track track = track_service.getById(trackId);
+    artist.getTracks().add(track);
+    return artist_repo.save(artist);
+}
 
 
 }

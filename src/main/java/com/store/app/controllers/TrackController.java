@@ -63,9 +63,5 @@ public class TrackController {
   public Track unlikTrack(@PathVariable Long trackId, @PathVariable Long userId){
     return track_service.unlikeTrack(trackId, userId);
   }
-
-  @PostMapping("/{trackId}/artist/{artistId}")
-  public Track addArtist(@PathVariable Long trackId, @PathVariable Long artistId){
-    return track_service.addArtist(trackId, artistId);
-  }
+ 
 }
