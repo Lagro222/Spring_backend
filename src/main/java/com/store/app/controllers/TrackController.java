@@ -48,4 +48,24 @@ public class TrackController {
   public void delete(@PathVariable Long id ){
     track_service.delete_track(id);
   }
+
+  @PostMapping("/{trackId}/album/{albumID}")
+  public Track addAlbum(@PathVariable Long trackId, @PathVariable Long albumID){
+    return track_service.assignAlbum(trackId, albumID);
+  }
+
+  @PostMapping("/{trackID}/like/{userId}")
+  public Track likeTrack(@PathVariable Long trackId, @PathVariable Long userId){
+    return track_service.likeTrack(trackId, userId);
+  }
+
+  @PostMapping("/{trackId}/unlike/{userId}")
+  public Track unlikTrack(@PathVariable Long trackId, @PathVariable Long userId){
+    return track_service.unlikeTrack(trackId, userId);
+  }
+
+  @PostMapping("/{trackId}/artist/{artistId}")
+  public Track addArtist(@PathVariable Long trackId, @PathVariable Long artistId){
+    return track_service.addArtist(trackId, artistId);
+  }
 }
