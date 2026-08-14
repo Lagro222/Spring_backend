@@ -53,15 +53,15 @@ public class TrackController {
   public Track addAlbum(@PathVariable Long trackId, @PathVariable Long albumID){
     return track_service.assignAlbum(trackId, albumID);
   }
+  //
+  // @PostMapping("/{trackID}/like/{userId}")
+  // public Track likeTrack(@PathVariable Long trackId, @PathVariable Long userId){
+  //   return track_service.likeTrack(trackId, userId);
+  // }
 
-  @PostMapping("/{trackID}/like/{userId}")
-  public Track likeTrack(@PathVariable Long trackId, @PathVariable Long userId){
-    return track_service.likeTrack(trackId, userId);
-  }
-
-  @PostMapping("/{trackId}/unlike/{userId}")
-  public Track unlikTrack(@PathVariable Long trackId, @PathVariable Long userId){
-    return track_service.unlikeTrack(trackId, userId);
-  }
+  // @PostMapping("/{trackId}/unlike/{userId}")
+  // public Track unlikTrack(@PathVariable Long trackId, @PathVariable Long userId){
+  //   return track_service.unlikeTrack(trackId, userId);
+  // }
  
 }
