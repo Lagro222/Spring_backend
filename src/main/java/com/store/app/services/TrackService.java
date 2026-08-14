@@ -25,7 +25,7 @@ public class TrackService {
   public final TrackRepository track_repository;
   public final AlbumService album_service;
   // public final ArtistService artist_service;
-  public final UserService userService;
+  // public final UserService userService;
 
   //functions for GET
   public List<Track> getAll(){return track_repository.findAll();}
