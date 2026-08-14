@@ -75,21 +75,21 @@ public class TrackService {
   //   return track_repository.save(target_track);
   //
   // }
+  //
+  // public Track likeTrack(Long trackId, Long userId){
+  //
+  //   Track target_track = getById(trackId);
+  //   User target_user = userService.getById(userId);
+  //   target_track.getUsers_liked().add(target_user);
+  //   return track_repository.save(target_track);
+  // }
 
-  public Track likeTrack(Long trackId, Long userId){
-    
-    Track target_track = getById(trackId);
-    User target_user = userService.getById(userId);
-    target_track.getUsers_liked().add(target_user);
-    return track_repository.save(target_track);
-  }
-
-  public Track unlikeTrack(Long trackId, Long userId){
-   
-    Track target_track = getById(trackId);
-    User target_user = userService.getById(userId);
-    target_track.getUsers_liked().remove(target_user);
-    return track_repository.save(target_track);
-  }
-
+  // public Track unlikeTrack(Long trackId, Long userId){
+  //
+  //   Track target_track = getById(trackId);
+  //   User target_user = userService.getById(userId);
+  //   target_track.getUsers_liked().remove(target_user);
+  //   return track_repository.save(target_track);
+  // }
+  //
 }

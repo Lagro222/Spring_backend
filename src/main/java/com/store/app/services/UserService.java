@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.repositories.UserRepository;
 
@@ -17,6 +18,9 @@ public class UserService {
   @Autowired
   private UserRepository user_repo;
 
+  @Autowired
+  private TrackService track_service;
+  
   public List<User> getAll(){return user_repo.findAll();}
   public List<User> getByName(String name){return user_repo.findByName(name);}
   public User getById(Long id){return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));}
@@ -39,4 +43,28 @@ public class UserService {
     User target_user = getById(id);
     user_repo.delete(target_user);
   }
+
+  public User likedTrack(Long trackId, Long userId){
+
+    User target_user = getById(userId);
+    Track target_track = track_service.getById(trackId);
+
+    target_user.getLiked().add(target_track);
+
+    return user_repo.save(target_user);
+
+  }
+
+  public User unlikedTrack(Long trackId, Long userId){
+
+    User target_user = getById(userId);
+    Track target_track = track_service.getById(trackId);
+
+    target_user.getLiked().remove(target_track);
+
+    return user_repo.save(target_user);
+
+  }
+
+
 }
