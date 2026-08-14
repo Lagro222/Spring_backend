@@ -66,5 +66,10 @@ public class UserService {
 
   }
 
+  public List<Track> getLikedTracks(Long userId){
+    User target_user = getById(userId);
+    return target_user.getLiked();
+  }
+
 
 }

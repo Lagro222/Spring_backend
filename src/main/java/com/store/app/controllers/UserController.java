@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.store.app.services.UserService;
+import com.store.app.entities.Track;
 import com.store.app.entities.User;
 
 /**
@@ -31,6 +32,11 @@ public class UserController {
 
   @GetMapping("/{id}")
   public User getById(Long id){return user_service.getById(id);}
+
+  @GetMapping("/{id}/liked")
+  public List<Track> getLikedTracks(@PathVariable Long id){
+    return user_service.getLikedTracks(id);
+  }
 
   @PostMapping
     public User create_user(@RequestBody User new_user){
