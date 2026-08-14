@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.app.DTOs.ArtistDTO.ArtistRequestDTO;
+import com.store.app.entities.Album;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
 import com.store.app.repositories.ArtistRepository;
@@ -21,6 +22,9 @@ public class ArtistService {
 
  @Autowired
  private TrackService track_service;
+
+ @Autowired
+ private AlbumService album_service;
 
  public List<Artist> getAll(){return artist_repo.findAll();}
 
@@ -63,11 +67,18 @@ public class ArtistService {
     Track track = track_service.getById(trackId);
     artist.getTracks().add(track);
     return artist_repo.save(artist);
-}
+  }
 
   public List<Track> getTraksByArtist(Long artistId){
     Artist artist = getById(artistId);
     return artist.getTracks();
+  }
+
+  public Artist addAlbum(Long artistId, Long albumId) {
+    Artist artist = getById(artistId);
+    Album album = album_service.getById(albumId);
+    artist.getAlbums().add(album);
+    return artist_repo.save(artist);
   }
 
 
