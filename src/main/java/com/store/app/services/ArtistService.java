@@ -65,5 +65,10 @@ public class ArtistService {
     return artist_repo.save(artist);
 }
 
+  public List<Track> getTraksByArtist(Long artistId){
+    Artist artist = getById(artistId);
+    return artist.getTracks();
+  }
+
 
 }

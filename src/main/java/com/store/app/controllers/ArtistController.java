@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.store.app.DTOs.ArtistDTO.ArtistRequestDTO;
 import com.store.app.entities.Artist;
+import com.store.app.entities.Track;
 import com.store.app.services.ArtistService;
 
 /**
@@ -35,6 +36,12 @@ public class ArtistController {
 
   @GetMapping("/search/{name}")
   public List<Artist> getByName(@PathVariable String name){return artist_service.getByName(name);}
+
+  @GetMapping("/{artistId}/tracks")
+  public List<Track> getTracksByArtist(@PathVariable Long artistId){
+    return artist_service.getTraksByArtist(artistId);
+  }
+
 
   @PostMapping
   public Artist create(@RequestBody ArtistRequestDTO artist){
