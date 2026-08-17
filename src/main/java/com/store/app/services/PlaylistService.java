@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.app.entities.Playlist;
+import com.store.app.entities.Track;
 import com.store.app.repositories.PlaylistRepository;
 
 /**
@@ -16,6 +17,9 @@ public class PlaylistService {
 
   @Autowired
   private PlaylistRepository playlist_repo;
+
+  @Autowired
+  private TrackService track_service;
 
   public List<Playlist> getAll(){return playlist_repo.findAll();}
   public Playlist getById(Long id){return playlist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such playlist"));}
@@ -39,4 +43,16 @@ public class PlaylistService {
     Playlist exist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist ! deleting failed"));
     playlist_repo.delete(exist);
   }
+
+  //relations functions
+  public Playlist add_Track(Long playlistId,Long trackId){
+    Track target_track = track_service.getById(trackId);
+    Playlist target_playlist = getById(playlistId);
+    target_playlist.getPlaylist_tracks().add(target_track);
+
+    return playlist_repo.save(target_playlist);
+  }
+
+  //searching functions
+  public List<Playlist> findByName(String name){ return playlist_repo.findByName(name);}
 }
