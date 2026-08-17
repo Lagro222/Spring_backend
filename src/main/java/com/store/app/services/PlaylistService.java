@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
+import com.store.app.entities.User;
+import com.store.app.enums.PlaylistType;
 import com.store.app.repositories.PlaylistRepository;
 
 /**
@@ -21,11 +23,22 @@ public class PlaylistService {
   @Autowired
   private TrackService track_service;
 
+  @Autowired
+  private UserService userService;
+
   public List<Playlist> getAll(){return playlist_repo.findAll();}
   public Playlist getById(Long id){return playlist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such playlist"));}
   public List<Playlist> getByTitle(String title){return playlist_repo.findByName(title);}
 
-  public Playlist create_playlist(Playlist new_playlist){
+  public Playlist create_playlist(Long userId,Playlist new_playlist){
+    
+    if(userId != null){
+      User user = userService.getById(userId);
+      new_playlist.setUser(user);
+      new_playlist.setType(PlaylistType.USER);
+    }else {
+      new_playlist.setType(PlaylistType.GLOBAL);
+    }
     return playlist_repo.save(new_playlist);
   }
 
