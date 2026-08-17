@@ -3,6 +3,8 @@ package com.store.app.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 // import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,5 +45,6 @@ public class Track {
  private List<User> users_liked = new ArrayList<>();
 
  @ManyToMany(mappedBy = "playlist_tracks")
+ @JsonIgnore
  private List<Playlist> playlists = new ArrayList<>();
 }

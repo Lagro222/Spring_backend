@@ -46,7 +46,6 @@ public class Playlist {
     joinColumns = @JoinColumn(name = "id_playlist"),
     inverseJoinColumns = @JoinColumn(name = "id_track")
   )
-  @JsonIgnore
   private List<Track> playlist_tracks = new ArrayList<>();
   
 }
