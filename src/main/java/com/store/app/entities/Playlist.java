@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -39,15 +40,18 @@ public class Playlist {
   @ManyToOne
   @JoinColumn(name = "id_user")
   private User user;
-
-  @ManyToMany
-  @JoinTable(
-    name = "playlist_track",
-    joinColumns = @JoinColumn(name = "id_playlist"),
-    inverseJoinColumns = @JoinColumn(name = "id_track")
-  )
-  private List<Track> playlist_tracks = new ArrayList<>();
   
+  // @ManyToMany
+  // @JoinTable(
+  //   name = "playlist_track",
+  //   joinColumns = @JoinColumn(name = "id_playlist"),
+  //   inverseJoinColumns = @JoinColumn(name = "id_track")
+  // )
+  // private List<Track> playlist_tracks = new ArrayList<>();
+
+  @OneToMany(mappedBy = "playlist")
+  private List<PlaylistTrack> tracks = new ArrayList<>();
+
 }
 
 

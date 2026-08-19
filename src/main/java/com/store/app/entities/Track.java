@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -43,8 +44,11 @@ public class Track {
 
  @ManyToMany(mappedBy = "liked")
  private List<User> users_liked = new ArrayList<>();
-
- @ManyToMany(mappedBy = "playlist_tracks")
- @JsonIgnore
- private List<Playlist> playlists = new ArrayList<>();
+ //
+ // @ManyToMany(mappedBy = "playlist_tracks")
+ // @JsonIgnore
+ // private List<Playlist> playlists = new ArrayList<>();
+ 
+ @OneToMany(mappedBy = "track")
+ private List<PlaylistTrack> playlist_tracks = new ArrayList<>();
 }
