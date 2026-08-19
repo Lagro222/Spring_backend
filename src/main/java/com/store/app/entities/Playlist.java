@@ -52,6 +52,10 @@ public class Playlist {
   @OneToMany(mappedBy = "playlist")
   private List<PlaylistTrack> tracks = new ArrayList<>();
 
+  @ManyToMany(mappedBy = "followed_playlists")
+  @JsonIgnore
+  private List<User> followers = new ArrayList<>();
+
 }
 
 

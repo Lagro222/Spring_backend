@@ -42,6 +42,23 @@ public class User {
   )
   private List<Track> liked = new ArrayList<>();
 
+  @ManyToMany
+  @JsonIgnore
+  @JoinTable(
+    name = "following_artist",
+    joinColumns = @JoinColumn(name = "id_user"),
+    inverseJoinColumns = @JoinColumn(name = "id_artist")
+  )
+  private List<Artist> followed_Artists = new ArrayList<>();
+
+  @ManyToMany
+  @JsonIgnore
+  @JoinTable(
+    name = "following_playlist",
+    joinColumns = @JoinColumn(name = "id_user"),
+    inverseJoinColumns = @JoinColumn(name = "id_playlist")
+  )
+  private List<Playlist> followed_playlists = new ArrayList<>();
   //to avoid conflict for remove() function
   @Override
   public boolean equals(Object o){

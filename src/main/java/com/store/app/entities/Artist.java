@@ -42,7 +42,7 @@ public class Artist{
   inverseJoinColumns = @JoinColumn(name = "id_album")
 )
 @JsonIgnore
- List<Album> albums = new ArrayList<>(); 
+private List<Album> albums = new ArrayList<>(); 
  
 @ManyToMany
 @JoinTable(
@@ -51,5 +51,10 @@ public class Artist{
   inverseJoinColumns = @JoinColumn( name = "id_track") 
 )
 @JsonIgnore
-List<Track> tracks = new ArrayList<>();
+private List<Track> tracks = new ArrayList<>();
+
+@ManyToMany(mappedBy = "followed_Artists")
+@JsonIgnore
+private List<User> followers = new ArrayList<>();
+
 }
