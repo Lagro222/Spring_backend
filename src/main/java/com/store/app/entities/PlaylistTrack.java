@@ -29,11 +29,11 @@ public class PlaylistTrack {
 
   @ManyToOne
   @JoinColumn(name = "playlist_id")
-  private Playlist playlist_id;
+  private Playlist playlist;
 
   @ManyToOne
   @JoinColumn(name = "track_id")
-  private Track track_id;
+  private Track track;
 
   @ManyToOne
   @JoinColumn(name = "added_by")
