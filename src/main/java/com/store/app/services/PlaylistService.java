@@ -1,15 +1,18 @@
 package com.store.app.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.app.entities.Playlist;
+import com.store.app.entities.PlaylistTrack;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.enums.PlaylistType;
 import com.store.app.repositories.PlaylistRepository;
+import com.store.app.repositories.PlaylistTrackRepository;
 
 /**
  * PlaylistService
@@ -25,6 +28,9 @@ public class PlaylistService {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private PlaylistTrackRepository playlist_track_repo;
 
   public List<Playlist> getAll(){return playlist_repo.findAll();}
   public Playlist getById(Long id){return playlist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such playlist"));}
@@ -58,13 +64,30 @@ public class PlaylistService {
   }
 
   //relations functions
-  public Playlist add_Track(Long playlistId,Long trackId){
-    Track target_track = track_service.getById(trackId);
-    Playlist target_playlist = getById(playlistId);
-    target_playlist.getPlaylist_tracks().add(target_track);
+  // public Playlist add_Track(Long playlistId,Long trackId){
+  //   Track target_track = track_service.getById(trackId);
+  //   Playlist target_playlist = getById(playlistId);
+  //   target_playlist.getPlaylist_tracks().add(target_track);
+  //
+  //   return playlist_repo.save(target_playlist);
+  // }
+    public Playlist add_track(Long playlistId,Long trackId, Long userId){
 
-    return playlist_repo.save(target_playlist);
-  }
+      Playlist target_palylist = getById(playlistId);
+      Track target_track = track_service.getById(trackId);
+      User target_user = userService.getById(userId);
+
+      PlaylistTrack new_playlistTrack = new PlaylistTrack();
+      new_playlistTrack.setPlaylist(target_palylist);
+      new_playlistTrack.setTrack(target_track);
+      new_playlistTrack.setAddedBy(target_user);
+      new_playlistTrack.setAddedAt(LocalDateTime.now());
+      new_playlistTrack.setPostion(target_palylist.getTracks().size() + 1);
+
+      playlist_track_repo.save(new_playlistTrack);
+
+      return target_palylist;
+    }
 
   //searching functions
   public List<Playlist> findByName(String name){ return playlist_repo.findByName(name);}
