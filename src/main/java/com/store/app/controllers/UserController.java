@@ -42,12 +42,12 @@ public class UserController {
     return user_service.getLikedTracks(id);
   }
 
-  @GetMapping("/{userId}/followed_artists")
+  @GetMapping("/{userId}/follow/artists")
   public List<Artist> getFollowed_artists(@PathVariable Long userId){
     return user_service.getFollowed_artist(userId);
   }
   
-  @GetMapping("/{userId}/followed_playlists")
+  @GetMapping("/{userId}/follow/playlists")
   public List<Playlist> getFollowed_playlists(@PathVariable Long userId){
     return user_service.getFollowed_playlists(userId);
   }
@@ -68,6 +68,12 @@ public class UserController {
     return user_service.follow_artist(userId, artistId);
   }
 
+  @PostMapping("/{userId}/follow/playlist/{playlistId}")
+  public User follow_playlist(@PathVariable Long userId,@PathVariable Long playlistId){
+    return user_service.follow_playlist(userId, playlistId);
+  }
+
+  //DELETE
   @DeleteMapping("/{userId}/follow/artist/{artistId}")
   public User unfollow_artist(@PathVariable Long userId,@PathVariable Long artistId){
     return user_service.unfollow_artist(userId, artistId);
