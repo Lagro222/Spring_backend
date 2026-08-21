@@ -51,7 +51,7 @@ public class PlaylistService {
   public Playlist update_playlist(Long id,Playlist updated){
     Playlist target_playlist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist !! updating failed"));
     target_playlist.setName(updated.getName());
-    target_playlist.setPlaylist_tracks(updated.getPlaylist_tracks());
+    target_playlist.setTracks(updated.getTracks());;
     target_playlist.setType(updated.getType());
     target_playlist.setUser(updated.getUser());
     
@@ -74,6 +74,11 @@ public class PlaylistService {
     public Playlist add_track(Long playlistId,Long trackId, Long userId){
 
       Playlist target_palylist = getById(playlistId);
+    
+      if(!target_palylist.isCollaborative() && !target_palylist.getUser().getId_user().equals(userId)){
+        throw new RuntimeException("you can't add track in this playlist is not collaborative");
+      }
+
       Track target_track = track_service.getById(trackId);
       User target_user = userService.getById(userId);
 
