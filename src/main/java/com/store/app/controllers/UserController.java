@@ -3,6 +3,7 @@ package  com.store.app.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +47,16 @@ public class UserController {
   @PostMapping("/{userId}/like/{trackId}")
   public User likedTrack(@PathVariable Long trackId,@PathVariable Long userId){
     return user_service.likedTrack(trackId, userId);
+  }
+
+  @PostMapping("/{userId}/follow/artist/{artistId}")
+  public User follow_artist(@PathVariable Long userId,@PathVariable Long artistId){
+    return user_service.follow_artist(userId, artistId);
+  }
+
+  @DeleteMapping("/{userId}/follow/artist/{artistId}")
+  public User unfollow_artist(@PathVariable Long userId,@PathVariable Long artistId){
+    return user_service.unfollow_artist(userId, artistId);
   }
 
 }

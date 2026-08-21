@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.repositories.UserRepository;
@@ -20,6 +21,9 @@ public class UserService {
 
   @Autowired
   private TrackService track_service;
+
+  @Autowired
+  private ArtistService artist_service;
   
   public List<User> getAll(){return user_repo.findAll();}
   public List<User> getByName(String name){return user_repo.findByName(name);}
@@ -69,6 +73,22 @@ public class UserService {
   public List<Track> getLikedTracks(Long userId){
     User target_user = getById(userId);
     return target_user.getLiked();
+  }
+
+  public User follow_artist(Long userId, Long artistId){
+    User user = getById(userId);
+    Artist artist = artist_service.getById(artistId);
+
+    user.getFollowed_Artists().add(artist);
+    return user_repo.save(user);
+  }
+
+  public User unfollow_artist(Long userId, Long artistId){
+    User user = getById(userId);
+    Artist artist = artist_service.getById(artistId);
+
+    user.getFollowed_Artists().remove(artist);
+    return user_repo.save(user);
   }
 
 
