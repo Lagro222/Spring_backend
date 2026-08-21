@@ -25,6 +25,7 @@ public class UserService {
   @Autowired
   private ArtistService artist_service;
   
+  //basic get functions
   public List<User> getAll(){return user_repo.findAll();}
   public List<User> getByName(String name){return user_repo.findByName(name);}
   public User getById(Long id){return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));}
@@ -48,6 +49,7 @@ public class UserService {
     user_repo.delete(target_user);
   }
 
+  //like/unlike feature
   public User likedTrack(Long trackId, Long userId){
 
     User target_user = getById(userId);
@@ -75,6 +77,7 @@ public class UserService {
     return target_user.getLiked();
   }
 
+  //follow/unfollow features
   public User follow_artist(Long userId, Long artistId){
     User user = getById(userId);
     Artist artist = artist_service.getById(artistId);
