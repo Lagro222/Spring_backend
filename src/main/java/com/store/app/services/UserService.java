@@ -9,6 +9,7 @@ import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
+import com.store.app.repositories.PlaylistRepository;
 import com.store.app.repositories.UserRepository;
 
 /**
@@ -25,11 +26,18 @@ public class UserService {
 
   @Autowired
   private ArtistService artist_service;
+
+  @Autowired
+  private PlaylistRepository playlist_repo;
   
   //basic get functions
   public List<User> getAll(){return user_repo.findAll();}
   public List<User> getByName(String name){return user_repo.findByName(name);}
   public User getById(Long id){return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));}
+  public Playlist getPlayListByID(Long playlistId){
+    Playlist playlist = playlist_repo.findById(playlistId).orElseThrow(() -> new RuntimeException("EROR: playlist not found!!"));
+    return playlist;
+  }
 
   public User create_user(User new_user){
     return user_repo.save(new_user);
@@ -94,6 +102,25 @@ public class UserService {
     user.getFollowed_Artists().remove(artist);
     return user_repo.save(user);
   }
+
+  public User follow_playlist(Long userID, Long playlistId){
+    
+    User user = getById(userID);
+    Playlist playlist = getPlayListByID(playlistId);
+
+    user.getFollowed_playlists().add(playlist);
+    return user_repo.save(user);
+  }
+
+  public User unfollow_playlist(Long userId,Long playlistId){
+    
+    User user = getById(userId);
+    Playlist playlist = getPlayListByID(playlistId);
+
+    user.getFollowed_playlists().remove(playlist);
+    return user_repo.save(user);
+  }
+
 
   public List<Artist> getFollowed_artist(Long userId){
     User user = getById(userId);
