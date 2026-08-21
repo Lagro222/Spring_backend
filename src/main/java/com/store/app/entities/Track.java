@@ -50,5 +50,6 @@ public class Track {
  // private List<Playlist> playlists = new ArrayList<>();
  
  @OneToMany(mappedBy = "track")
+ @JsonIgnore
  private List<PlaylistTrack> playlist_tracks = new ArrayList<>();
 }
