@@ -2,6 +2,8 @@ package com.store.app.entities;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +30,7 @@ public class PlaylistTrack {
   private Long id;
 
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(name = "playlist_id")
   private Playlist playlist;
 
