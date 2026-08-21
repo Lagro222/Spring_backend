@@ -49,8 +49,8 @@ public class PlaylistController {
   }
 
   @PostMapping("/{playlistId}/track/{trackId}")
-  public Playlist addTrack(@PathVariable Long playlistId,@PathVariable Long trackId){
-    return playlist_service.add_Track(playlistId, trackId);
+  public Playlist addTrack(@PathVariable Long playlistId,@PathVariable Long trackId,@RequestParam Long userId){
+    return playlist_service.add_track(playlistId, trackId, userId);
   }
 
 }
