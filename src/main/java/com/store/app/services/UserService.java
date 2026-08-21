@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.app.entities.Artist;
+import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.repositories.UserRepository;
@@ -94,5 +95,14 @@ public class UserService {
     return user_repo.save(user);
   }
 
+  public List<Artist> getFollowed_artist(Long userId){
+    User user = getById(userId);
+    return user.getFollowed_Artists();
+  }
+
+  public List<Playlist> getFollowed_playlists(Long userId){
+    User user = getById(userId);
+    return user.getFollowed_playlists();
+  }
 
 }
