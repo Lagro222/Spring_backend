@@ -11,7 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
+// import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -35,7 +35,8 @@ public class Playlist {
   private Long id_playlist;
 
   private String name ;
-  private PlaylistType type; 
+  private PlaylistType type;
+  private boolean isCollaborative = false;
 
   @ManyToOne
   @JoinColumn(name = "id_user")
@@ -50,6 +51,7 @@ public class Playlist {
   // private List<Track> playlist_tracks = new ArrayList<>();
 
   @OneToMany(mappedBy = "playlist")
+  @JsonIgnore
   private List<PlaylistTrack> tracks = new ArrayList<>();
 
   @ManyToMany(mappedBy = "followed_playlists")
