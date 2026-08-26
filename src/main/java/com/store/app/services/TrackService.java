@@ -39,7 +39,7 @@ public class TrackService {
     Track exist = track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track.. updating failed !!"));
     exist.setAlbum(updating.getAlbum());
     exist.setAlbum(updating.getAlbum());;
-    exist.setPlaylists(updating.getPlaylists());
+    exist.setPlaylist_tracks(updating.getPlaylist_tracks());
     exist.setFile_path(updating.getFile_path());
     exist.setRealease_date(updating.getRealease_date());
 
