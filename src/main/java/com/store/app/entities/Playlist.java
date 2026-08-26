@@ -16,10 +16,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Playlist
@@ -34,7 +35,9 @@ public class Playlist {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_playlist;
 
+  @NotBlank(message = "Please enter a valid name")  
   private String name ;
+  @NonNull(message = "Please enter a valid type")
   private PlaylistType type;
   private boolean isCollaborative = false;
 
