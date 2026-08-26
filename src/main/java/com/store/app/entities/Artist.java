@@ -12,6 +12,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 // import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,8 +33,13 @@ public class Artist{
  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_artist ;
 
+ @NotBlank(message = "Please enter a valid name")
  private String name ;
+
+ @NotBlank(message = "Please enter a valid genre")
  private String genre;
+ 
+ @NotBlank(message = "Please enter a valid country")
  private String country;
 
 @ManyToMany
