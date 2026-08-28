@@ -15,6 +15,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,8 +33,13 @@ public class Track {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_track;
 
+  @NotBlank(message = "Please enter a valid title")
   private String title;
+
+  @NotBlank(message = "Please enter a valid file path")
   private String file_path;
+
+  @NotNull(message = "Please enter a valid release date")
   private Integer realease_date;
 
   @ManyToOne
