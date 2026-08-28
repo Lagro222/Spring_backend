@@ -17,10 +17,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+im
 
 /**
  * Playlist
@@ -37,7 +38,7 @@ public class Playlist {
 
   @NotBlank(message = "Please enter a valid name")  
   private String name ;
-  @NonNull(message = "Please enter a valid type")
+  @NotNull(message = "Please enter a valid type")
   private PlaylistType type;
   private boolean isCollaborative = false;
 
