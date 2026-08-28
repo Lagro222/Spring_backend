@@ -29,9 +29,15 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_user ;
 
+  @NotBlank(message = "Please enter a valid name")
   private String name;
+
+  @NotBlank(message = "Please enter a valid firstname")
   private String firstname;
+
+  @NotBlank(message = "Please enter a valid lastname")
   private String email;
+
 
   @ManyToMany
   @JsonIgnore
