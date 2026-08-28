@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.store.app.services.AlbumService;
+
+import jakarta.validation.Valid;
+
 import com.store.app.entities.Album;
 /**
  * AlbumController
@@ -41,10 +44,10 @@ public class AlbumController {
   }
  
   @PostMapping
-  public Album create_Album(@RequestBody Album new_album){return album_service.create(new_album);}
+  public Album create_Album(@Valid @RequestBody Album new_album){return album_service.create(new_album);}
 
   @PutMapping("/{id}")
-  public Album update_Album(@PathVariable Long id ,@RequestBody Album new_album){
+  public Album update_Album(@PathVariable Long id ,@Valid @RequestBody Album new_album){
     return   album_service.update(id,new_album);
   }
 }
