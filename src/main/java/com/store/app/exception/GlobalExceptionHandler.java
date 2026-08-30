@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
- 
+
+  //handle validation exception
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
     List<String> errors = ex.getBindingResult()
@@ -22,6 +23,14 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(apiError);
 
   }
+
+  //hnadle runtime exception
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex) {
+    ApiError error = new ApiError(404, ex.getMessage(), List.of());
+    return ResponseEntity.status(404).body(error);
     
+  }
+
 
 }
