@@ -16,6 +16,8 @@ import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
 import com.store.app.services.ArtistService;
 
+import jakarta.validation.Valid;
+
 /**
  * ArtistController
  */
@@ -44,7 +46,7 @@ public class ArtistController {
 
 
   @PostMapping
-  public Artist create(@RequestBody ArtistRequestDTO artist){
+  public Artist create(@Valid @RequestBody ArtistRequestDTO artist){
     return artist_service.create_artist(artist);
   }
 

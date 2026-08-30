@@ -44,7 +44,7 @@ public class PlaylistController {
 
   //postmapping
   @PostMapping
-  public Playlist create_playlist(@RequestParam(required = false) Long userId,@RequestBody Playlist new_playlist){
+  public Playlist create_playlist(@RequestParam(required = false) Long userId, @Valid @RequestBody Playlist new_playlist){
     return playlist_service.create_playlist(userId,new_playlist);
   }
 

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.store.app.services.UserService;
+
+import jakarta.validation.Valid;
+
 import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
@@ -54,7 +57,7 @@ public class UserController {
 
   //POST 
   @PostMapping
-    public User create_user(@RequestBody User new_user){
+    public User create_user(@Valid  @RequestBody User new_user){
     return user_service.create_user(new_user);
   }
 
