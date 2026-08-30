@@ -32,5 +32,11 @@ public class GlobalExceptionHandler {
     
   }
 
+  //handle all other exception
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ApiError> handleException(Exception ex) {
+    ApiError error = new ApiError(500, ex.getMessage(), List.of());
+    return ResponseEntity.status(500).body(error);
+  }
 
 }
