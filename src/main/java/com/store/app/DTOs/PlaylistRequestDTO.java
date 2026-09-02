@@ -1,5 +1,7 @@
 package com.store.app.DTOs;
 
+import com.store.app.enums.PlaylistType;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,7 +20,7 @@ public class PlaylistRequestDTO {
   private Integer releaseYear;
 
   @NotNull(message = "Please enter a valid type")
-  private String playlistType;
+  private PlaylistType playlistType;  
 
   private Boolean isCollaborative = false;
 }
