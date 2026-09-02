@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+
+import com.store.app.DTOs.PlaylistRequestDTO;
 import com.store.app.entities.Playlist;
 // import com.store.app.enums.PlaylistType;
 import com.store.app.services.PlaylistService;
@@ -44,13 +47,19 @@ public class PlaylistController {
 
   //postmapping
   @PostMapping
-  public Playlist create_playlist(@RequestParam(required = false) Long userId, @Valid @RequestBody Playlist new_playlist){
-    return playlist_service.create_playlist(userId,new_playlist);
+  public Playlist create_playlist(@RequestParam(required = false) Long userId, @Valid @RequestBody PlaylistRequestDTO new_playlist){
+    return playlist_service.create_playlist(userId,new_playlist);  
   }
 
   @PostMapping("/{playlistId}/track/{trackId}")
   public Playlist addTrack(@PathVariable Long playlistId,@PathVariable Long trackId,@RequestParam Long userId){
     return playlist_service.add_track(playlistId, trackId, userId);
+  }
+
+
+  @PutMapping("/update/{id}")
+  public Playlist update_playlist(@PathVariable Long id, @Valid @RequestBody PlaylistRequestDTO updated){
+    return playlist_service.update_playlist(id,updated);
   }
 
 }

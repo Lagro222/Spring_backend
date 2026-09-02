@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.store.app.DTOs.TrackRequestDTO;
 import com.store.app.entities.Track;
 import com.store.app.services.TrackService;
 
@@ -41,10 +42,10 @@ public class TrackController {
   }
 
   @PostMapping
-  public Track create(@Valid @RequestBody Track new_track){return track_service.create_track(new_track);}
+  public Track create(@Valid @RequestBody TrackRequestDTO new_track){return track_service.create_track(new_track);}
 
   @PutMapping("/update/{id}")
-  public Track update(@PathVariable Long id,@Valid @RequestBody Track updating){return track_service.update_track(id, updating);}
+  public Track update(@PathVariable Long id,@Valid @RequestBody TrackRequestDTO updating){return track_service.update_track(id, updating);}
 
   @DeleteMapping("/{id}")
   public void delete(@PathVariable Long id ){

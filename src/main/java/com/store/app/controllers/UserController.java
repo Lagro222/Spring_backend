@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import com.store.app.services.UserService;
 
 import jakarta.validation.Valid;
 
+import com.store.app.DTOs.UserRequestDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
@@ -57,7 +59,7 @@ public class UserController {
 
   //POST 
   @PostMapping
-    public User create_user(@Valid  @RequestBody User new_user){
+    public User create_user(@Valid  @RequestBody UserRequestDTO new_user){
     return user_service.create_user(new_user);
   }
 
@@ -74,6 +76,12 @@ public class UserController {
   @PostMapping("/{userId}/follow/playlist/{playlistId}")
   public User follow_playlist(@PathVariable Long userId,@PathVariable Long playlistId){
     return user_service.follow_playlist(userId, playlistId);
+  }
+
+  //PUT
+  @PutMapping("/update/{userId}")
+  public User update_user(@PathVariable Long userId, @Valid @RequestBody UserRequestDTO updated){
+    return user_service.update_user(userId, updated);
   }
 
   //DELETE
