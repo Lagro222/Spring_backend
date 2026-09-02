@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.app.DTOs.AlbumRequestDTO;
 import com.store.app.entities.Album;
 import com.store.app.repositories.AlbumRepository;
 
@@ -24,18 +25,21 @@ public class AlbumService {
   
   public List<Album> getByName(String album_name){return album_repo.findByTitle(album_name);}
 
-  public Album create(Album album){
-    return album_repo.save(album);
+  public Album create(AlbumRequestDTO album){
+    
+    Album new_album = new Album();
+    new_album.setTitle(album.getTitle());
+    new_album.setReleaseYear(album.getReleaseYear());
+
+    return album_repo.save(new_album);
   } 
 
-  public Album update( Long id,Album album){
+  public Album update( Long id,AlbumRequestDTO album){
 
     Album exist = album_repo.findById(id).orElseThrow(()-> new RuntimeException("no such album // updating stoped."));
 
-    exist.setArtists(album.getArtists());
-    exist.setReleaseYear(album.getReleaseYear());
     exist.setTitle(album.getTitle());
-    exist.setTracks(album.getTracks());
+    exist.setReleaseYear(album.getReleaseYear());
 
     return album_repo.save(exist);
   }

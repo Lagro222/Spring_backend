@@ -34,23 +34,21 @@ public class ArtistService {
  public Artist create_artist(ArtistRequestDTO artist){
    Artist new_artist = new Artist();
 
-   new_artist.setName(artist.name());
-   new_artist.setGenre(artist.genre());
-   new_artist.setCountry(artist.country());
+   new_artist.setName(artist.getName());
+   new_artist.setGenre(artist.getGenre());
+   new_artist.setCountry(artist.getCountry());
 
    return artist_repo.save(new_artist);
  }
 
- public Artist update(Long id , Artist new_args){
+ public Artist update(Long id , ArtistRequestDTO new_args){
 
    Artist target =  artist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such artist"));
 
    target.setName(new_args.getName());
    target.setCountry(new_args.getCountry());
    target.setGenre(new_args.getGenre());
-   target.setAlbums(new_args.getAlbums());
-   target.setTracks(new_args.getTracks());
-
+   
    return artist_repo.save(target); 
 
  }

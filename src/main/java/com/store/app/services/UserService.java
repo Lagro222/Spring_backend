@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.app.DTOs.UserRequestDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
@@ -39,10 +40,16 @@ public class UserService {
     return playlist;
   }
 
-  public User create_user(User new_user){
-    return user_repo.save(new_user);
+  public User create_user(UserRequestDTO new_user){
+    
+    User user = new User();
+    user.setName(new_user.getName());
+    user.setEmail(new_user.getEmail());
+    user.setFirstname(new_user.getFirstname());
+
+    return user_repo.save(user);
   }
-  public User update_user(Long user_id, User updating){
+  public User update_user(Long user_id, UserRequestDTO updating){
     
     User target_user = getById(user_id);
     target_user.setName(updating.getName());

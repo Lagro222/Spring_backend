@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.app.DTOs.PlaylistRequestDTO;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.PlaylistTrack;
 import com.store.app.entities.Track;
@@ -36,25 +37,32 @@ public class PlaylistService {
   public Playlist getById(Long id){return playlist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such playlist"));}
   public List<Playlist> getByTitle(String title){return playlist_repo.findByName(title);}
 
-  public Playlist create_playlist(Long userId,Playlist new_playlist){
+  public Playlist create_playlist(Long userId,PlaylistRequestDTO new_playlist){
     
+    Playlist playlist = new Playlist();
+
     if(userId != null){
       User user = userService.getById(userId);
-      new_playlist.setUser(user);
-      new_playlist.setType(PlaylistType.USER);
+      playlist.setUser(user);
+      playlist.setType(PlaylistType.USER);
     }else {
-      new_playlist.setType(PlaylistType.GLOBAL);
+      playlist.setType(PlaylistType.GLOBAL);
     }
-    return playlist_repo.save(new_playlist);
+
+    playlist.setName(new_playlist.getName());
+    playlist.setCollaborative(new_playlist.getIsCollaborative());
+    
+    return playlist_repo.save(playlist);
   }
 
-  public Playlist update_playlist(Long id,Playlist updated){
-    Playlist target_playlist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist !! updating failed"));
-    target_playlist.setName(updated.getName());
-    target_playlist.setTracks(updated.getTracks());;
-    target_playlist.setType(updated.getType());
-    target_playlist.setUser(updated.getUser());
+  public Playlist update_playlist(Long id,PlaylistRequestDTO updated){
     
+    Playlist target_playlist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist !! updating failed"));
+    
+    target_playlist.setName(updated.getName());
+    target_playlist.setType(updated.getPlaylistType()) ;
+    target_playlist.setCollaborative(updated.getIsCollaborative());
+   
     return playlist_repo.save(target_playlist);
   }
 

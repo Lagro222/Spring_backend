@@ -5,10 +5,11 @@ import java.util.List;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.app.DTOs.TrackRequestDTO;
 import com.store.app.entities.Album;
-import com.store.app.entities.Artist;
+// import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
-import com.store.app.entities.User;
+// import com.store.app.entities.User;
 import com.store.app.repositories.TrackRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,16 +34,18 @@ public class TrackService {
   public Track getById(Long id){return track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track"));}
 
   //crud functions
-  public Track create_track(Track new_track){return track_repository.save(new_track);}
-  public Track update_track(Long id , Track updating){
-    
-    Track exist = track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track.. updating failed !!"));
-    exist.setAlbum(updating.getAlbum());
-    exist.setAlbum(updating.getAlbum());;
-    exist.setPlaylist_tracks(updating.getPlaylist_tracks());
-    exist.setFile_path(updating.getFile_path());
-    exist.setRealease_date(updating.getRealease_date());
+  public Track create_track(TrackRequestDTO new_track){
 
+    Track track = new Track();
+    track.setTitle(new_track.getTitle());
+    track.setRealease_date(new_track.getReleaseDate());
+
+    return track_repository.save(track);
+  }
+  public Track update_track(Long id , TrackRequestDTO updating){
+    
+    Track exist = getById(id);
+    exist.setRealease_date(updating.getReleaseDate());
     exist.setTitle(updating.getTitle());
 
     return track_repository.save(exist);
