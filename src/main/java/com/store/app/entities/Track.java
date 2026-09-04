@@ -36,11 +36,11 @@ public class Track {
   @NotBlank(message = "Please enter a valid title")
   private String title;
 
-  @NotBlank(message = "Please enter a valid file path")
+  // @NotBlank(message = "Please enter a valid file path")
   private String file_path;
 
   @NotNull(message = "Please enter a valid release date")
-  private Integer realease_date;
+  private Integer release_date;
 
   @ManyToOne
   @JoinColumn(name = "album_id")

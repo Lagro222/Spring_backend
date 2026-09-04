@@ -15,5 +15,5 @@ public class TrackRequestDTO {
   private String title;
 
   @NotNull(message = "Please enter a valid release date")
-  private Integer releaseDate;
+  private Integer release_date;
 }

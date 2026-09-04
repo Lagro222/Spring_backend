@@ -38,14 +38,14 @@ public class TrackService {
 
     Track track = new Track();
     track.setTitle(new_track.getTitle());
-    track.setRealease_date(new_track.getReleaseDate());
+    track.setRelease_date(new_track.getRelease_date());
 
     return track_repository.save(track);
   }
   public Track update_track(Long id , TrackRequestDTO updating){
     
     Track exist = getById(id);
-    exist.setRealease_date(updating.getReleaseDate());
+    exist.setRelease_date(updating.getRelease_date());
     exist.setTitle(updating.getTitle());
 
     return track_repository.save(exist);
