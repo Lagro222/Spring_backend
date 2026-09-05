@@ -18,4 +18,7 @@ public class UserRequestDTO {
   
   @NotBlank(message = "please enter a valid email")
   private String email;
+
+  @NotBlank(message = "please enter a valid password")
+  private String password;
 }
