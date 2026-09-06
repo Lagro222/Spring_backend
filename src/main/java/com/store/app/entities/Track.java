@@ -43,6 +43,10 @@ public class Track {
   private Integer release_date;
 
   @ManyToOne
+  @JoinColumn(name= "owner_id")
+  private User owner;
+
+  @ManyToOne
   @JoinColumn(name = "album_id")
   private Album album;
 

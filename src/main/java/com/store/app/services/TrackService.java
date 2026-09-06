@@ -9,6 +9,8 @@ import com.store.app.DTOs.TrackRequestDTO;
 import com.store.app.entities.Album;
 // import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
+import com.store.app.entities.User;
+import com.store.app.enums.Role;
 // import com.store.app.entities.User;
 import com.store.app.repositories.TrackRepository;
 
@@ -34,26 +36,43 @@ public class TrackService {
   public Track getById(Long id){return track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track"));}
 
   //crud functions
-  public Track create_track(TrackRequestDTO new_track){
+  public Track create_track(TrackRequestDTO new_track, User current_user){
 
     Track track = new Track();
     track.setTitle(new_track.getTitle());
     track.setRelease_date(new_track.getRelease_date());
+    track.setOwner(current_user);
 
     return track_repository.save(track);
   }
-  public Track update_track(Long id , TrackRequestDTO updating){
+  public Track update_track(Long id , TrackRequestDTO updating, User current_user){
     
     Track exist = getById(id);
+
+    boolean is_owner = exist.getOwner().getId_user().equals(current_user.getId_user());
+    boolean is_admin = current_user.getRole() == Role.ADMIN;
+
+    if(!is_owner && !is_admin){
+      throw new RuntimeException("you are not authorized to update this track");
+    }
+
     exist.setRelease_date(updating.getRelease_date());
     exist.setTitle(updating.getTitle());
 
     return track_repository.save(exist);
   }
 
-  public void delete_track(Long id){
+  public void delete_track(Long id,User current_user){
     
-    Track exist = track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track.. deleting failed !!"));
+    Track exist = getById(id);
+    
+    boolean is_owner = exist.getOwner().getId_user().equals(current_user.getId_user());
+    boolean is_admin = current_user.getRole() == Role.ADMIN;
+    
+    if(!is_owner && !is_admin){
+      throw new RuntimeException("you are not authorized to delete this track");
+    }
+
     track_repository.delete(exist);
 
   }
