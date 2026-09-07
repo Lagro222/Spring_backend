@@ -5,12 +5,14 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import com.store.app.entities.User;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+@Service
 public class JwtService {
 
   private final String SECRET_KEY = System.getenv("JWT_SECRET");
@@ -37,7 +39,7 @@ public class JwtService {
 
   public boolean isTokenValid(String token, UserDetails userDetails){
     String email = extractEmail(token);
-    return email.equals(userDetails.getUsername()) && !
+    return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
   }
 
   public boolean isTokenExpired(String token){
