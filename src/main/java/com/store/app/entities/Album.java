@@ -7,7 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 // import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -35,6 +37,10 @@ public class Album {
 
   @NotNull(message = "Please enter a valid release year")
   private Integer releaseYear;
+
+  @ManyToOne
+  @JoinColumn(name = "owner_id")
+  private User owner;
 
   @ManyToMany(mappedBy = "albums")
   @JsonIgnore
