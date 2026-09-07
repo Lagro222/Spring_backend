@@ -37,7 +37,7 @@ public class PlaylistService {
   public Playlist getById(Long id){return playlist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such playlist"));}
   public List<Playlist> getByTitle(String title){return playlist_repo.findByName(title);}
 
-  public Playlist create_playlist(Long userId,PlaylistRequestDTO new_playlist){
+  public Playlist create_playlist(Long userId,PlaylistRequestDTO new_playlist , User current_user){
     
     Playlist playlist = new Playlist();
 
@@ -51,14 +51,23 @@ public class PlaylistService {
 
     playlist.setName(new_playlist.getName());
     playlist.setCollaborative(new_playlist.getIsCollaborative());
+    playlist.setUser(current_user);
     
     return playlist_repo.save(playlist);
   }
 
-  public Playlist update_playlist(Long id,PlaylistRequestDTO updated){
+  public Playlist update_playlist(Long id,PlaylistRequestDTO updated, User current_user){
     
     Playlist target_playlist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist !! updating failed"));
     
+    boolean is_owner = target_playlist.getUser().getId_user().equals(current_user.getId_user());
+    boolean is_admin = current_user.getRole() == Role.ADMIN;
+    
+    if(!is_owner && !is_admin){
+      throw new RuntimeException("you are not authorized to update this playlist");
+    }
+
+
     target_playlist.setName(updated.getName());
     target_playlist.setType(updated.getPlaylistType()) ;
     target_playlist.setCollaborative(updated.getIsCollaborative());
@@ -66,8 +75,17 @@ public class PlaylistService {
     return playlist_repo.save(target_playlist);
   }
 
-  public void delete_playlist(Long id){
+  public void delete_playlist(Long id, User current_user){
+
     Playlist exist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist ! deleting failed"));
+    
+    boolean is_owner = exist.getUser().getId_user().equals(current_user.getId_user());
+    boolean is_admin = current_user.getRole() == Role.ADMIN;
+    
+    if(!is_owner && !is_admin){
+      throw new RuntimeException("you are not authorized to delete this playlist");
+    }
+
     playlist_repo.delete(exist);
   }
 
