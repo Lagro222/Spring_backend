@@ -10,6 +10,7 @@ import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
+import com.store.app.enums.Role;
 import com.store.app.repositories.PlaylistRepository;
 import com.store.app.repositories.UserRepository;
 
@@ -49,8 +50,15 @@ public class UserService {
 
     return user_repo.save(user);
   }
-  public User update_user(Long user_id, UserRequestDTO updating){
+  public User update_user(Long user_id, UserRequestDTO updating, User current_user){
     
+    boolean is_owner = current_user.getId_user().equals(user_id);
+    boolean is_admin = current_user.getRole() == Role.AADMIN;
+    
+    if(!is_owner && !is_admin){
+      throw new RuntimeException("you are not authorized to update this user");
+    }
+
     User target_user = getById(user_id);
     target_user.setName(updating.getName());
     target_user.setEmail(updating.getEmail());
@@ -60,8 +68,16 @@ public class UserService {
 
   }
 
-  public void delete_user(Long id){
+  public void delete_user(Long id, User current_user){
     User target_user = getById(id);
+
+    boolean is_owner = target_user.getId_user().equals(current_user.getId_user());
+    boolean is_admin = current_user.getRole() == Role.ADMIN;
+    
+    if(!is_owner && !is_admin){
+      throw new RuntimeException("you are not authorized to delete this user");
+    }
+
     user_repo.delete(target_user);
   }
 
