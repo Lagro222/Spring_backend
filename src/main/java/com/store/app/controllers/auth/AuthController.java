@@ -3,7 +3,9 @@ package com.store.app.controllers.auth;
 import java.util.Map;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +46,13 @@ public class AuthController {
    
   }
 
+  @PostMapping("/login")
+  public Map<String, String> login(@Valid @RequestBody UserRequestDTO user_dto){
+    auth_manger.authenticate(new UsernamePasswordAuthenticationToken(user_dto.getEmail(), user_dto.getPassword()));
+    User user = (User) user_service.loadUserByUsername(user_dto.getEmail());
+    String token = jwt_servie.generateToken(user);
+    return Map.of("token",token);
+  }
 
 
 }
