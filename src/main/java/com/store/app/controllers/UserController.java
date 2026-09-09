@@ -57,11 +57,7 @@ public class UserController {
     return user_service.getFollowed_playlists(userId);
   }
 
-  //POST 
-  @PostMapping
-    public User create_user(@Valid  @RequestBody UserRequestDTO new_user){
-    return user_service.create_user(new_user);
-  }
+  //POST
 
   @PostMapping("/{userId}/like/{trackId}")
   public User likedTrack(@PathVariable Long trackId,@PathVariable Long userId){
