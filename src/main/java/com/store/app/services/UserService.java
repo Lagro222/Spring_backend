@@ -3,6 +3,8 @@ package  com.store.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.store.app.DTOs.UserRequestDTO;
@@ -18,7 +20,7 @@ import com.store.app.repositories.UserRepository;
  * UserService
  */
 @Service
-public class UserService {
+public class UserService implements UserDetailsService  {
 
   @Autowired
   private UserRepository user_repo;
@@ -41,14 +43,8 @@ public class UserService {
     return playlist;
   }
 
-  public User create_user(UserRequestDTO new_user){
-    
-    User user = new User();
-    user.setName(new_user.getName());
-    user.setEmail(new_user.getEmail());
-    user.setFirstname(new_user.getFirstname());
-
-    return user_repo.save(user);
+  public User create_user(User new_user){
+    return user_repo.save(new_user);
   }
   public User update_user(Long user_id, UserRequestDTO updating, User current_user){
     
@@ -153,6 +149,12 @@ public class UserService {
   public List<Playlist> getFollowed_playlists(Long userId){
     User user = getById(userId);
     return user.getFollowed_playlists();
+  }
+
+
+  @Override
+  public UserDetails loadUserByUsername(String email){
+    return user_repo.fingByEmail(email).orElseThrow(() -> new RuntimeException("no such user"));
   }
 
 }
