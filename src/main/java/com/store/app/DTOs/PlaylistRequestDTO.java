@@ -16,8 +16,8 @@ public class PlaylistRequestDTO {
   @NotBlank(message = "Please enter a valid name")
   private String name;
   
-  @NotNull(message = "Please enter a valid release year")
-  private Integer releaseYear;
+  // @NotNull(message = "Please enter a valid release year")
+  // private Integer releaseYear;
 
   @NotNull(message = "Please enter a valid type")
   private PlaylistType playlistType;  
