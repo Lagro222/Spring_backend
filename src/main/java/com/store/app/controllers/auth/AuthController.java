@@ -47,7 +47,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public Map<String, String> login(@Valid @RequestBody UserRequestDTO user_dto){
+  public Map<String, String> login(@RequestBody UserRequestDTO user_dto){
     auth_manger.authenticate(new UsernamePasswordAuthenticationToken(user_dto.getEmail(), user_dto.getPassword()));
     User user = (User) user_service.loadUserByUsername(user_dto.getEmail());
     String token = jwt_servie.generateToken(user);
