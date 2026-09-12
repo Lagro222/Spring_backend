@@ -49,7 +49,9 @@ public class TrackController {
   }
 
   @PutMapping("/update/{id}")
-  public Track update(@PathVariable Long id,@Valid @RequestBody TrackRequestDTO updating){return track_service.update_track(id, updating);}
+  public Track update(@PathVariable Long id,@Valid @RequestBody TrackRequestDTO updating ,@AuthenticationPrincipal User current_user){
+    return track_service.update_track(id, updating,current_user);
+  }
 
   @DeleteMapping("/{id}")
   public void delete(@PathVariable Long id , @AuthenticationPrincipal User current_user){
