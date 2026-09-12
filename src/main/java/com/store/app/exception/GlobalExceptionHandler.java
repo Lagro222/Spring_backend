@@ -3,6 +3,7 @@ package com.store.app.exception;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
     ApiError error = new ApiError(404, ex.getMessage(), List.of());
     return ResponseEntity.status(404).body(error);
     
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ApiError> handleDuplicatedEmail(DataIntegrityViolationException ex){
+    ApiError error = new ApiError(400, "Email already exist", List.of());
+    return ResponseEntity.badRequest().body(error);
   }
 
   //handle all other exception
