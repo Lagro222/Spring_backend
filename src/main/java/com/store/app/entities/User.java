@@ -11,6 +11,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import com.store.app.enums.Role;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,6 +49,7 @@ public class User implements UserDetails{
   private String firstname;
 
   @NotBlank(message = "Please enter a valid lastname")
+  @Column(unique = true)
   private String email;
 
   @Enumerated(EnumType.STRING)
