@@ -20,6 +20,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+
+import org.hibernate.annotations.NotFound;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,6 +54,7 @@ public class User implements UserDetails{
   private Role role = Role.USER;
 
   @NotBlank(message = "Please enter a valid password")
+  @JsonIgnore
   private String password;
 
   @ManyToMany
@@ -97,6 +100,7 @@ public class User implements UserDetails{
 
   //Authontification
   @Override
+  @JsonIgnore
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
   }
@@ -111,5 +115,21 @@ public class User implements UserDetails{
     return email;
   }
 
+  @Override
+  @JsonIgnore
+  public boolean isAccountNonExpired(){return true;}
 
-}
+  @Override
+  @JsonIgnore
+  public boolean isAccountNonLocked(){return true;}
+
+  @Override
+  @JsonIgnore
+  public boolean isCredentialsNonExpired(){return true;}
+
+  @Override
+  @JsonIgnore
+  public boolean isEnabled(){return true;}
+
+  
+  }
