@@ -26,6 +26,13 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
     httpSecurity
       .csrf(csrf -> csrf.disable())
+      .exceptionHandling(ex -> ex
+          .authenticationEntryPoint((req, res, authException) -> {
+            res.setStatus(401);
+            res.setContentType("application/json");
+            res.getWriter().write("{\"status\": 401 ,\"message\":\"Unauthorized - please login\",\"errors\":[]}");
+          })
+          )
       .authorizeHttpRequests(auth -> auth
           
           //public
@@ -53,6 +60,7 @@ public class SecurityConfig {
 
           //any logged in user
          .requestMatchers(HttpMethod.POST,"/playlists/**").authenticated()
+         .requestMatchers(HttpMethod.POST,"/playlists/create").authenticated()
          .requestMatchers(HttpMethod.PUT,"/playlists/**").authenticated()
          .requestMatchers(HttpMethod.POST, "/users/**").authenticated()
          .requestMatchers(HttpMethod.PUT, "/users/**").authenticated()
