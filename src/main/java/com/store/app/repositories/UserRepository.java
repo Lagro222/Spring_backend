@@ -16,6 +16,6 @@ import com.store.app.entities.User;
 public interface UserRepository extends JpaRepository<User,Long> {
 
   List<User> findByName(String name);
-  Optional<User> fingByEmail(String email);
+  Optional<User> findByEmail(String email);
   
 }
