@@ -12,6 +12,7 @@ import com.store.app.entities.PlaylistTrack;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.enums.PlaylistType;
+import com.store.app.enums.Role;
 import com.store.app.repositories.PlaylistRepository;
 import com.store.app.repositories.PlaylistTrackRepository;
 
