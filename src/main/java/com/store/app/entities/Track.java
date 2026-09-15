@@ -51,7 +51,7 @@ public class Track {
   private Album album;
 
  @ManyToMany(mappedBy = "tracks")
- private List<Artist> artist = new ArrayList<>();
+ private List<Artist> artists  = new ArrayList<>();
 
  @ManyToMany(mappedBy = "liked")
  private List<User> users_liked = new ArrayList<>();
