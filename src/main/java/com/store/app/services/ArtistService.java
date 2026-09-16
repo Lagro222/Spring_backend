@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.store.app.DTOs.ArtistDTO.ArtistRequestDTO;
+import com.store.app.DTOs.artistDTO.ArtistRequestDTO;
 import com.store.app.entities.Album;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
