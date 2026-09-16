@@ -1,11 +1,13 @@
 package com.store.app.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.store.app.DTOs.TrackRequestDTO;
+import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
+import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Album;
 // import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
@@ -30,24 +32,58 @@ public class TrackService {
   // public final ArtistService artist_service;
   // public final UserService userService;
 
+
+  private TrackResponseDTO toDTO(Track track){
+    return new TrackResponseDTO(
+        track.getId_track(),
+        track.getTitle(),
+        track.getRelease_date(), 
+        track.getOwner().getName(),
+        track.getAlbum(),
+        track.getArtists() 
+        );
+  }
   //functions for GET
-  public List<Track> getAll(){return track_repository.findAll();}
-  public List<Track> getByTitle(String title){return track_repository.findByTitle(title);}
-  public Track getById(Long id){return track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track"));}
+  public List<TrackResponseDTO> getAll(){
+    return track_repository.findAll()
+      .stream()
+      .map(this::toDTO) // so i remmember this::toDTO means track -> this.toDTO(track)  
+      .collect(Collectors.toList());
+  }
+  public List<TrackResponseDTO> getByTitle(String title){
+    return track_repository.findByTitle(title)
+      .stream()
+      .map(t -> new TrackResponseDTO(
+            t.getId_track(),
+            t.getTitle(),
+            t.getRelease_date(),
+            t.getOwner().getName(),
+            t.getAlbum(),
+            t.getArtists())
+          ).collect(Collectors.toList());
+  }
+  public TrackResponseDTO getById(Long id){ 
+  
+    Track track = track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track"));
+
+    return toDTO(track);
+  }
 
   //crud functions
-  public Track create_track(TrackRequestDTO new_track, User current_user){
+  public TrackResponseDTO create_track(TrackRequestDTO new_track, User current_user){
 
     Track track = new Track();
     track.setTitle(new_track.getTitle());
     track.setRelease_date(new_track.getRelease_date());
     track.setOwner(current_user);
 
-    return track_repository.save(track);
+    track_repository.save(track);
+
+    return toDTO(track);
   }
-  public Track update_track(Long id , TrackRequestDTO updating, User current_user){
+  public TrackResponseDTO update_track(Long id , TrackRequestDTO updating, User current_user){
     
-    Track exist = getById(id);
+    Track exist = track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track // updating stoped."));
 
     boolean is_owner = exist.getOwner().getId_user().equals(current_user.getId_user());
     boolean is_admin = current_user.getRole() == Role.ADMIN;
@@ -59,12 +95,14 @@ public class TrackService {
     exist.setRelease_date(updating.getRelease_date());
     exist.setTitle(updating.getTitle());
 
-    return track_repository.save(exist);
+    track_repository.save(exist);
+
+    return toDTO(exist);
   }
 
   public void delete_track(Long id,User current_user){
     
-    Track exist = getById(id);
+    Track exist = track_repository.findById(id).orElseThrow(() -> new RuntimeException("no such track // deleting stoped."));
     
     boolean is_owner = exist.getOwner().getId_user().equals(current_user.getId_user());
     boolean is_admin = current_user.getRole() == Role.ADMIN;
@@ -80,7 +118,7 @@ public class TrackService {
   //functions for conection with other entities
   public Track assignAlbum(Long trackId, Long albumId){
 
-    Track target_track = getById(trackId);
+    Track target_track =  track_repository.findById(trackId).orElseThrow(()-> new RuntimeException("no such track"));;
     Album target_album = album_service.getById(albumId);
 
     target_track.setAlbum(target_album);
