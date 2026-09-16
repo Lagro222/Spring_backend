@@ -1,4 +1,4 @@
-package com.store.app.DTOs;
+package com.store.app.DTOs.playlistDTO;
 
 import com.store.app.enums.PlaylistType;
 

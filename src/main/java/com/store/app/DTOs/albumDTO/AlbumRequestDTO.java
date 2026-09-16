@@ -1,4 +1,4 @@
-package com.store.app.DTOs;
+package com.store.app.DTOs.albumDTO;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

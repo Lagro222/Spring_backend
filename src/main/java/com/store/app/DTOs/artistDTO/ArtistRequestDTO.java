@@ -1,4 +1,4 @@
-package  com.store.app.DTOs.ArtistDTO;
+package  com.store.app.DTOs.artistDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
