@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.store.app.DTOs.TrackRequestDTO;
+import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
+import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.services.TrackService;
@@ -33,10 +34,10 @@ public class TrackController {
   private TrackService track_service;
 
   @GetMapping
-  public List<Track> getAll(){return track_service.getAll();}
+  public List<TrackResponseDTO> getAll(){return track_service.getAll();}
 
   @GetMapping("/search")
-  public List<Track> getByTitle(@RequestParam(required = false) Long id,@RequestParam(required = false) String title){
+  public List<TrackResponseDTO> getByTitle(@RequestParam(required = false) Long id,@RequestParam(required = false) String title){
     if (id != null) return List.of(track_service.getById(id)); 
     if (title != null) return track_service.getByTitle(title);
 
@@ -44,12 +45,17 @@ public class TrackController {
   }
 
   @PostMapping
-  public Track create(@Valid @RequestBody TrackRequestDTO new_track , @AuthenticationPrincipal User current_user){
+  public TrackResponseDTO create(@Valid @RequestBody TrackRequestDTO new_track , @AuthenticationPrincipal User current_user){
     return track_service.create_track(new_track, current_user);
   }
 
   @PutMapping("/update/{id}")
-  public Track update(@PathVariable Long id,@Valid @RequestBody TrackRequestDTO updating ,@AuthenticationPrincipal User current_user){
+  public TrackResponseDTO update(
+      @PathVariable Long id,
+      @Valid @RequestBody TrackRequestDTO updating ,
+      @AuthenticationPrincipal User current_user
+   )
+  {
     return track_service.update_track(id, updating,current_user);
   }
 
