@@ -17,7 +17,7 @@ import com.store.app.services.UserService;
 
 import jakarta.validation.Valid;
 
-import com.store.app.DTOs.UserRequestDTO;
+import com.store.app.DTOs.userDTO.UserRequestDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.store.app.DTOs.ArtistDTO.ArtistRequestDTO;
+import com.store.app.DTOs.artistDTO.ArtistRequestDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
 import com.store.app.services.ArtistService;

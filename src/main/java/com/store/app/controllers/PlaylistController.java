@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
-import com.store.app.DTOs.PlaylistRequestDTO;
+import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.User;
 // import com.store.app.enums.PlaylistType;
