@@ -2,7 +2,7 @@ package com.store.app.DTOs.tracksDTO;
 
 import java.util.List;
 
-import com.store.app.entities.Album;
+import com.store.app.DTOs.albumDTO.HelperAlbumDTO;
 import com.store.app.entities.Artist;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ public class TrackResponseDTO {
   private String title;
   private Integer release_date;
   private String owner_name;
-  private Album album;
+  private HelperAlbumDTO album;
   private List<Artist> artists;
 
 }
