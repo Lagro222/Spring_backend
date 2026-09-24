@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
   private final JwtFilter jwtFilter;
+  private final AccessHandler accessHandler;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -32,6 +34,7 @@ public class SecurityConfig {
             res.setContentType("application/json");
             res.getWriter().write("{\"status\": 401 ,\"message\":\"Unauthorized - please login\",\"errors\":[]}");
           })
+          .accessDeniedHandler(accessHandler)   
           )
       .authorizeHttpRequests(auth -> auth
           
@@ -55,7 +58,7 @@ public class SecurityConfig {
   
           .requestMatchers(HttpMethod.POST,"/tracks/**").hasAnyRole("ARTIST","ADMIN")
           .requestMatchers(HttpMethod.PUT,"/tracks/**").hasAnyRole("ARTIST","ADMIN")
-          .requestMatchers(HttpMethod.POST,"/albums/**").hasAnyRole("ARTIST?","ADMIN")
+          .requestMatchers(HttpMethod.POST,"/albums/**").hasAnyRole("ARTIST","ADMIN")
           .requestMatchers(HttpMethod.PUT,"/albums/**").hasAnyRole("ARTIST?","ADMIN")
 
           //any logged in user
