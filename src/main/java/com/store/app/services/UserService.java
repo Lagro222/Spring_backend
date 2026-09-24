@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.store.app.DTOs.UserRequestDTO;
+import com.store.app.DTOs.userDTO.UserRequestDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
@@ -92,7 +92,7 @@ public class UserService implements UserDetailsService  {
   public User unlikedTrack(Long trackId, Long userId){
 
     User target_user = getById(userId);
-    Track target_track = track_service.getById(trackId);
+    Track target_track = track_service.findById(trackId);
 
     target_user.getLiked().remove(target_track);
 

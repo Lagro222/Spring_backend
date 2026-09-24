@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.store.app.DTOs.PlaylistRequestDTO;
+import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.PlaylistTrack;
 import com.store.app.entities.Track;
@@ -106,7 +106,7 @@ public class PlaylistService {
         throw new RuntimeException("you can't add track in this playlist is not collaborative");
       }
 
-      Track target_track = track_service.getById(trackId);
+      Track target_track = track_service.findById(trackId);
       User target_user = userService.getById(userId);
 
       PlaylistTrack new_playlistTrack = new PlaylistTrack();
