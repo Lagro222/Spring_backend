@@ -1,13 +1,16 @@
 package  com.store.app.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import com.store.app.DTOs.artistDTO.ArtistResponseDTO;
 import com.store.app.DTOs.userDTO.UserRequestDTO;
+import com.store.app.DTOs.userDTO.UserResponseDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
@@ -34,9 +37,31 @@ public class UserService implements UserDetailsService  {
   @Autowired
   private PlaylistRepository playlist_repo;
   
+
+  public UserResponseDTO toDto(User user){
+    return new UserResponseDTO(
+        user.getId_user(),
+        user.getName(),
+        user.getFirstname(),
+        user.getFollowed_Artists()
+        ); 
+  } 
+
+
   //basic get functions
   public List<User> getAll(){return user_repo.findAll();}
-  public List<User> getByName(String name){return user_repo.findByName(name);}
+  public List<UserResponseDTO> SearchAll(String name){
+    List<User> users = user_repo.findByName(name);
+    return users.stream().map(this::toDto).collect(Collectors.toList());
+
+  }
+  public List<UserResponseDTO> searchAritsts(String name){
+    List<User> users = user_repo.findByName(name);
+    return users.stream()
+      .filter(user -> user.getRole() == Role.ARTIST)
+      .map(this::toDto)
+      .collect(Collectors.toList());
+  }
   public User getById(Long id){return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));}
   public Playlist getPlayListByID(Long playlistId){
     Playlist playlist = playlist_repo.findById(playlistId).orElseThrow(() -> new RuntimeException("EROR: playlist not found!!"));
@@ -81,7 +106,7 @@ public class UserService implements UserDetailsService  {
   public User likedTrack(Long trackId, Long userId){
 
     User target_user = getById(userId);
-    Track target_track = track_service.getById(trackId);
+    Track target_track = track_service.findById(trackId);
 
     target_user.getLiked().add(target_track);
 
