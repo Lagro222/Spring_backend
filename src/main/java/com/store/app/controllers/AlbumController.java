@@ -18,8 +18,9 @@ import com.store.app.services.AlbumService;
 
 import jakarta.validation.Valid;
 
-import com.store.app.DTOs.AlbumRequestDTO;
-import com.store.app.entities.Album;
+import com.store.app.DTOs.albumDTO.AlbumRequestDTO;
+import com.store.app.DTOs.albumDTO.AlbumResponseDTO;
+// import com.store.app.entities.Album;
 import com.store.app.entities.User;
 /**
  * AlbumController
@@ -32,7 +33,7 @@ public class AlbumController {
   private AlbumService album_service;
 
   @GetMapping
-  public List<Album> getAll(){
+  public List<AlbumResponseDTO> getAll(){
     return album_service.getAll();
   }
 
@@ -40,7 +41,7 @@ public class AlbumController {
   // public Album getById(@PathVariable Long id){return album_service.getById(id);}
   
   @GetMapping("/search")
-  public List<Album> getByTitle(@RequestParam(required = false) Long id,@RequestParam(required = false) String title){
+  public List<AlbumResponseDTO> searchAlbums(@RequestParam(required = false) Long id,@RequestParam(required = false) String title){
     if (id != null) return List.of(album_service.getById(id)); 
     if (title != null) return album_service.getByName(title);
 
@@ -48,13 +49,13 @@ public class AlbumController {
   }
  
   @PostMapping("/create")
-  public Album create_Album(@Valid @RequestBody AlbumRequestDTO new_album,@AuthenticationPrincipal User current_user){
+  public AlbumResponseDTO create_Album(@Valid @RequestBody AlbumRequestDTO new_album,@AuthenticationPrincipal User current_user){
     return album_service.create(new_album,current_user);
   }
 
 
   @PutMapping("/update/{id}")
-  public Album update_Album(
+  public AlbumResponseDTO update_Album(
       @PathVariable Long id ,
       @Valid @RequestBody AlbumRequestDTO new_album,
       @AuthenticationPrincipal User current_user
