@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.app.DTOs.albumDTO.HelperAlbumDTO;
 import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Album;
@@ -33,17 +34,31 @@ public class TrackService {
   // public final UserService userService;
 
 
-  private TrackResponseDTO toDTO(Track track){
+  public TrackResponseDTO toDTO(Track track){
+   
+    HelperAlbumDTO album = track.getAlbum() != null ? 
+      new HelperAlbumDTO(
+          track.getAlbum().getId_album(),
+          track.getAlbum().getTitle(),
+          track.getAlbum().getReleaseYear(),
+          track.getAlbum().getOwner().getName() 
+          ): null;
+
+
     return new TrackResponseDTO(
         track.getId_track(),
         track.getTitle(),
         track.getRelease_date(), 
-        track.getOwner().getName(),
-        track.getAlbum(),
+        track.getOwner() != null ? track.getOwner().getName() : null,
+        album,
         track.getArtists() 
         );
   }
   //functions for GET
+  
+  public Track findById(Long id){return track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track"));}
+
+
   public List<TrackResponseDTO> getAll(){
     return track_repository.findAll()
       .stream()
@@ -53,14 +68,8 @@ public class TrackService {
   public List<TrackResponseDTO> getByTitle(String title){
     return track_repository.findByTitle(title)
       .stream()
-      .map(t -> new TrackResponseDTO(
-            t.getId_track(),
-            t.getTitle(),
-            t.getRelease_date(),
-            t.getOwner().getName(),
-            t.getAlbum(),
-            t.getArtists())
-          ).collect(Collectors.toList());
+      .map(this::toDTO)
+      .collect(Collectors.toList());
   }
   public TrackResponseDTO getById(Long id){ 
   
@@ -119,7 +128,7 @@ public class TrackService {
   public Track assignAlbum(Long trackId, Long albumId){
 
     Track target_track =  track_repository.findById(trackId).orElseThrow(()-> new RuntimeException("no such track"));;
-    Album target_album = album_service.getById(albumId);
+    Album target_album = album_service.findById(albumId);
 
     target_track.setAlbum(target_album);
 
