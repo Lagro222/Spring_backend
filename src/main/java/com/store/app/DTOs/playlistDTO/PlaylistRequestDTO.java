@@ -20,7 +20,7 @@ public class PlaylistRequestDTO {
   // private Integer releaseYear;
 
   @NotNull(message = "Please enter a valid type")
-  private PlaylistType playlistType;  
+  private PlaylistType playlistType; 
 
   private Boolean isCollaborative = false;
 }
