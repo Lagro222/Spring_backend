@@ -2,11 +2,14 @@ package com.store.app.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
+import com.store.app.DTOs.playlistDTO.PlaylistResponseDTO;
+import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.PlaylistTrack;
 import com.store.app.entities.Track;
@@ -37,6 +40,26 @@ public class PlaylistService {
   public List<Playlist> getAll(){return playlist_repo.findAll();}
   public Playlist getById(Long id){return playlist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such playlist"));}
   public List<Playlist> getByTitle(String title){return playlist_repo.findByName(title);}
+
+  public PlaylistResponseDTO toDTO(Playlist playlist){
+    List<TrackResponseDTO> tracks = playlist.getTracks()
+      .stream()
+      .map(playlistTrack -> track_service.toDTO(playlistTrack.getTrack()))
+      .collect(Collectors.toList());
+
+    Integer likes = playlist.getType() == PlaylistType.GLOBAL ? playlist.getFollowers().size() : null;
+
+    return new PlaylistResponseDTO(
+        playlist.getId_playlist(),
+        playlist.getName(),
+        playlist.getUser().getName(),
+        playlist.getType(), 
+        playlist.isCollaborative(), 
+        tracks,
+        likes
+        );
+  }
+
 
   public Playlist create_playlist(Long userId,PlaylistRequestDTO new_playlist , User current_user){
     
