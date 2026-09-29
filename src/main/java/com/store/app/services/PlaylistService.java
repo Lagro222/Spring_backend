@@ -18,6 +18,9 @@ import com.store.app.enums.PlaylistType;
 import com.store.app.enums.Role;
 import com.store.app.repositories.PlaylistRepository;
 import com.store.app.repositories.PlaylistTrackRepository;
+import com.store.app.repositories.UserRepository;
+
+import jakarta.transaction.Transactional;
 
 /**
  * PlaylistService
@@ -32,7 +35,8 @@ public class PlaylistService {
   private TrackService track_service;
 
   @Autowired
-  private UserService userService;
+  private UserRepository user_repo;
+  // private UserService userService;
 
   @Autowired
   private PlaylistTrackRepository playlist_track_repo;
@@ -56,6 +60,7 @@ public class PlaylistService {
     return playlists.stream().map(this::toDTO).collect(Collectors.toList());
   }
 
+  @Transactional
   public PlaylistResponseDTO toDTO(Playlist playlist){
     List<TrackResponseDTO> tracks = playlist.getTracks()
       .stream()
@@ -144,27 +149,28 @@ public class PlaylistService {
   //
   //   return playlist_repo.save(target_playlist);
   // }
-    public PlaylistResponseDTO add_track(Long playlistId,Long trackId, Long userId){
+    @Transactional
+    public PlaylistResponseDTO add_track(Long playlistId,Long trackId, User current_user){
 
-      System.out.println("user id" + userId);
+      // System.out.println("user id" + userId);
       Playlist target_palylist =  playlist_repo
         .findById(playlistId)
         .orElseThrow(() -> new RuntimeException("no such playlist"));
 
       System.out.println("playlist owner:" + target_palylist.getUser().getId_user());
-      System.out.println("current user:" + userId);
+      // System.out.println("current user:" + userId);
     
-      if( target_palylist.getUser().getId_user() != userId && target_palylist.isCollaborative() == false){
+      if( target_palylist.getUser().getId_user() != current_user.getId_user() && target_palylist.isCollaborative() == false){
         throw new RuntimeException("you can't add track in this playlist is not collaborative");
       }
 
       Track target_track = track_service.findById(trackId);
-      User target_user = userService.getById(userId);
+      // User target_user = user_repo.findById(current_user.getId_user()).orElseThrow(() -> new RuntimeException("no such user")); 
 
       PlaylistTrack new_playlistTrack = new PlaylistTrack();
       new_playlistTrack.setPlaylist(target_palylist);
       new_playlistTrack.setTrack(target_track);
-      new_playlistTrack.setAddedBy(target_user);
+      new_playlistTrack.setAddedBy(current_user);
       new_playlistTrack.setAddedAt(LocalDateTime.now());
       new_playlistTrack.setPostion(target_palylist.getTracks().size() + 1);
 
