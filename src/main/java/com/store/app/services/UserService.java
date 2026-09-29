@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.store.app.DTOs.artistDTO.ArtistResponseDTO;
+// import com.store.app.DTOs.artistDTO.ArtistResponseDTO;
 import com.store.app.DTOs.userDTO.UserRequestDTO;
 import com.store.app.DTOs.userDTO.UserResponseDTO;
 import com.store.app.entities.Artist;
@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService  {
   @Autowired
   private ArtistService artist_service;
 
-  @Autowired
+   @Autowired
   private PlaylistRepository playlist_repo;
   
 
@@ -63,11 +63,6 @@ public class UserService implements UserDetailsService  {
       .collect(Collectors.toList());
   }
   public User getById(Long id){return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));}
-  public Playlist getPlayListByID(Long playlistId){
-    Playlist playlist = playlist_repo.findById(playlistId).orElseThrow(() -> new RuntimeException("EROR: playlist not found!!"));
-    return playlist;
-  }
-
   public User create_user(User new_user){
     return user_repo.save(new_user);
   }
