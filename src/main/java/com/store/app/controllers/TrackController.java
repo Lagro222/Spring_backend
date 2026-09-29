@@ -65,7 +65,7 @@ public class TrackController {
   }
 
   @PostMapping("/{trackId}/album/{albumID}")
-  public Track addAlbum(@PathVariable Long trackId, @PathVariable Long albumID){
+  public TrackResponseDTO addAlbum(@PathVariable Long trackId, @PathVariable Long albumID){
     return track_service.assignAlbum(trackId, albumID);
   }
   //
