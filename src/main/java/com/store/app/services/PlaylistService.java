@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
 import com.store.app.DTOs.playlistDTO.PlaylistResponseDTO;
+import com.store.app.DTOs.tracksDTO.HelperTrackDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.PlaylistTrack;
@@ -62,9 +63,14 @@ public class PlaylistService {
 
   @Transactional
   public PlaylistResponseDTO toDTO(Playlist playlist){
-    List<TrackResponseDTO> tracks = playlist.getTracks()
+    List<HelperTrackDTO> tracks = playlist.getTracks()
       .stream()
-      .map(playlistTrack -> track_service.toDTO(playlistTrack.getTrack()))
+      .map(playlistTrack -> new HelperTrackDTO(
+            playlistTrack.getTrack().getTitle(),
+            playlistTrack.getTrack().getArtists().isEmpty() ? 
+            playlistTrack.getTrack().getOwner().getName() : playlistTrack.getTrack().getArtists().get(0).getName(),
+            playlistTrack.getTrack().getAlbum() != null ? playlistTrack.getTrack().getAlbum().getTitle() : null
+            ) )
       .collect(Collectors.toList());
 
     Integer likes = playlist.getType() == PlaylistType.GLOBAL ? playlist.getFollowers().size() : null;
@@ -178,7 +184,12 @@ public class PlaylistService {
       playlist_track_repo.save(new_playlistTrack);
 
       PlaylistResponseDTO playlist_response = toDTO(target_palylist);
-      playlist_response.getTracks().add(track_service.toDTO(target_track));
+      playlist_response.getTracks().add(
+          new HelperTrackDTO(
+            target_track.getTitle(), 
+            target_track.getOwner() != null ? target_track.getOwner().getName() : null,
+            target_track.getAlbum() != null ? target_track.getAlbum().getTitle(): null
+            ));
 
       return playlist_response;
     }
