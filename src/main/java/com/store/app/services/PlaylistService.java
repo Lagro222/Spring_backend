@@ -165,6 +165,7 @@ public class PlaylistService {
       }
 
       Track target_track = track_service.findById(trackId);
+      // target_palylist.getTracks().add(track_service.toDTO(target_track));
       // User target_user = user_repo.findById(current_user.getId_user()).orElseThrow(() -> new RuntimeException("no such user")); 
 
       PlaylistTrack new_playlistTrack = new PlaylistTrack();
@@ -176,7 +177,10 @@ public class PlaylistService {
 
       playlist_track_repo.save(new_playlistTrack);
 
-      return toDTO(target_palylist);
+      PlaylistResponseDTO playlist_response = toDTO(target_palylist);
+      playlist_response.getTracks().add(track_service.toDTO(target_track));
+
+      return playlist_response;
     }
 
   
