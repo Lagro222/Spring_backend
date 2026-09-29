@@ -11,6 +11,7 @@ import com.store.app.DTOs.albumDTO.AlbumResponseDTO;
 import com.store.app.DTOs.albumDTO.HelperAlbumDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Album;
+import com.store.app.entities.Artist;
 import com.store.app.entities.User;
 import com.store.app.enums.Role;
 import com.store.app.repositories.AlbumRepository;
@@ -26,8 +27,8 @@ public class AlbumService {
   @Autowired
   private AlbumRepository album_repo;
 
-  @Autowired
-  private TrackRepository track_repo;
+  // @Autowired
+  // private TrackRepository track_repo;
 
   private AlbumResponseDTO toDTO(Album album){
    
@@ -38,6 +39,9 @@ public class AlbumService {
         album.getOwner().getName() != null ? album.getOwner().getName() : null
         );
 
+  List<String> artists = album.getArtists().isEmpty() ? List.of(album.getOwner().getName()) :
+      album.getArtists().stream().map(Artist::getName).collect(Collectors.toList());
+
     List<TrackResponseDTO> tracks = album.getTracks()
       .stream()
       .map(track -> new TrackResponseDTO(
@@ -46,8 +50,9 @@ public class AlbumService {
             track.getRelease_date(), 
             track.getOwner().getName() != null ? track.getOwner().getName() : null ,
             albumDTO, 
-            track.getArtists())
+            artists
           )
+       )
       .collect(Collectors.toList());
 
 
