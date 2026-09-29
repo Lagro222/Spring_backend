@@ -62,7 +62,7 @@ public class ArtistService {
 
  public Artist addTrack(Long artistId, Long trackId) {
     Artist artist = getById(artistId);
-    Track track = track_service.getById(trackId);
+    Track track = track_service.findById(trackId);
     artist.getTracks().add(track);
     return artist_repo.save(artist);
   }
@@ -74,7 +74,7 @@ public class ArtistService {
 
   public Artist addAlbum(Long artistId, Long albumId) {
     Artist artist = getById(artistId);
-    Album album = album_service.getById(albumId);
+    Album album = album_service.findById(albumId);
     artist.getAlbums().add(album);
     return artist_repo.save(artist);
   }
