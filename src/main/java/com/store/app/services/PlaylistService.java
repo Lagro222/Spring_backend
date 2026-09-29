@@ -37,9 +37,24 @@ public class PlaylistService {
   @Autowired
   private PlaylistTrackRepository playlist_track_repo;
 
-  public List<Playlist> getAll(){return playlist_repo.findAll();}
-  public Playlist getById(Long id){return playlist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such playlist"));}
-  public List<Playlist> getByTitle(String title){return playlist_repo.findByName(title);}
+  public List<PlaylistResponseDTO> getAll(){
+     
+    List<Playlist> playlists = playlist_repo.findAll();
+    return playlists.stream().map(this::toDTO).collect(Collectors.toList());
+  }
+  public PlaylistResponseDTO getById(Long id){
+    
+    Playlist playlist =  playlist_repo
+    .findById(id)
+    .orElseThrow(() -> new RuntimeException("no such playlist"));
+
+    return toDTO(playlist);
+
+  }
+  public List<PlaylistResponseDTO> getByTitle(String title){
+    List<Playlist> playlists = playlist_repo.findByName(title);
+    return playlists.stream().map(this::toDTO).collect(Collectors.toList());
+  }
 
   public PlaylistResponseDTO toDTO(Playlist playlist){
     List<TrackResponseDTO> tracks = playlist.getTracks()
@@ -61,26 +76,32 @@ public class PlaylistService {
   }
 
 
-  public Playlist create_playlist(Long userId,PlaylistRequestDTO new_playlist , User current_user){
+  public PlaylistResponseDTO create_playlist(Long userId,PlaylistRequestDTO new_playlist , User current_user){
     
     Playlist playlist = new Playlist();
+    
+    // if(userId != null){
+    //   User user = userService.getById(userId);
+    //   playlist.setUser(user);
+    //   playlist.setType(PlaylistType.USER);
+    // }else {
+    //   playlist.setType(PlaylistType.GLOBAL);
+    // }
+    //
 
-    if(userId != null){
-      User user = userService.getById(userId);
-      playlist.setUser(user);
-      playlist.setType(PlaylistType.USER);
-    }else {
-      playlist.setType(PlaylistType.GLOBAL);
-    }
-
+    playlist.setUser(current_user);
+    playlist.setType(new_playlist.getPlaylistType());
     playlist.setName(new_playlist.getName());
     playlist.setCollaborative(new_playlist.getIsCollaborative());
     playlist.setUser(current_user);
     
-    return playlist_repo.save(playlist);
+    playlist_repo.save(playlist);
+    System.out.println("playlist owner" + playlist.getUser().getId_user());
+
+    return toDTO(playlist);
   }
 
-  public Playlist update_playlist(Long id,PlaylistRequestDTO updated, User current_user){
+  public PlaylistResponseDTO update_playlist(Long id,PlaylistRequestDTO updated, User current_user){
     
     Playlist target_playlist = playlist_repo.findById(id).orElseThrow(()-> new RuntimeException("no such playlist !! updating failed"));
     
@@ -96,7 +117,9 @@ public class PlaylistService {
     target_playlist.setType(updated.getPlaylistType()) ;
     target_playlist.setCollaborative(updated.getIsCollaborative());
    
-    return playlist_repo.save(target_playlist);
+    playlist_repo.save(target_playlist);
+
+    return toDTO(target_playlist);
   }
 
   public void delete_playlist(Long id, User current_user){
@@ -121,11 +144,17 @@ public class PlaylistService {
   //
   //   return playlist_repo.save(target_playlist);
   // }
-    public Playlist add_track(Long playlistId,Long trackId, Long userId){
+    public PlaylistResponseDTO add_track(Long playlistId,Long trackId, Long userId){
 
-      Playlist target_palylist = getById(playlistId);
+      System.out.println("user id" + userId);
+      Playlist target_palylist =  playlist_repo
+        .findById(playlistId)
+        .orElseThrow(() -> new RuntimeException("no such playlist"));
+
+      System.out.println("playlist owner:" + target_palylist.getUser().getId_user());
+      System.out.println("current user:" + userId);
     
-      if(!target_palylist.isCollaborative() && !target_palylist.getUser().getId_user().equals(userId)){
+      if( target_palylist.getUser().getId_user() != userId && target_palylist.isCollaborative() == false){
         throw new RuntimeException("you can't add track in this playlist is not collaborative");
       }
 
@@ -141,9 +170,8 @@ public class PlaylistService {
 
       playlist_track_repo.save(new_playlistTrack);
 
-      return target_palylist;
+      return toDTO(target_palylist);
     }
 
-  //searching functions
-  public List<Playlist> findByName(String name){ return playlist_repo.findByName(name);}
+  
 }
