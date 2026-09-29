@@ -18,6 +18,7 @@ import com.store.app.services.UserService;
 import jakarta.validation.Valid;
 
 import com.store.app.DTOs.userDTO.UserRequestDTO;
+import com.store.app.DTOs.userDTO.UserResponseDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.Track;
@@ -38,7 +39,7 @@ public class UserController {
   public List<User> getAll(){return user_service.getAll();}
 
   @GetMapping("/search/{name}")
-  public List<User> getByName(@PathVariable String name){ return user_service.getByName(name);}
+  public List<UserResponseDTO> getByName(@PathVariable String name){ return user_service.searchAritsts(name);}
 
   @GetMapping("/{id}")
   public User getById(Long id){return user_service.getById(id);}
