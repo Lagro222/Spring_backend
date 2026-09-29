@@ -20,9 +20,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.NotBlank;
 
-import org.hibernate.annotations.NotFound;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,21 +40,16 @@ public class User implements UserDetails{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_user ;
-
-  @NotBlank(message = "Please enter a valid name")
+  
   private String name;
-
-  @NotBlank(message = "Please enter a valid firstname")
   private String firstname;
-
-  @NotBlank(message = "Please enter a valid lastname")
+ 
   @Column(unique = true)
   private String email;
 
   @Enumerated(EnumType.STRING)
   private Role role = Role.USER;
 
-  @NotBlank(message = "Please enter a valid password")
   @JsonIgnore
   private String password;
 

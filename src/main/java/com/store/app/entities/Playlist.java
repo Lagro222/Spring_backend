@@ -35,10 +35,8 @@ public class Playlist {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_playlist;
-
-  @NotBlank(message = "Please enter a valid name")  
+  
   private String name ;
-  @NotNull(message = "Please enter a valid type")
   private PlaylistType type;
   private boolean isCollaborative = false;
 
