@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
+import com.store.app.DTOs.playlistDTO.PlaylistResponseDTO;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.User;
 // import com.store.app.enums.PlaylistType;
@@ -33,23 +34,23 @@ public class PlaylistController {
 
   //getMapping :
   @GetMapping
-  public List<Playlist> getAll(){
+  public List<PlaylistResponseDTO> getAll(){
     return playlist_service.getAll();
   }
 
   @GetMapping("/{id}")
-  public Playlist getById(@PathVariable Long id){
+  public PlaylistResponseDTO getById(@PathVariable Long id){
     return playlist_service.getById(id);
   }
 
   @GetMapping("/search/{name}")
-  public List<Playlist> getByName(@PathVariable String name){
-    return playlist_service.findByName(name);
+  public List<PlaylistResponseDTO> getByName(@PathVariable String name){
+    return playlist_service.getByTitle(name);
   }
 
   //postmapping
   @PostMapping("/create")
-  public Playlist create_playlist(
+  public PlaylistResponseDTO create_playlist(
       @RequestParam(required = false) Long userId,
       @Valid @RequestBody PlaylistRequestDTO new_playlist,
       @AuthenticationPrincipal User current_user
@@ -58,13 +59,17 @@ public class PlaylistController {
   }
 
   @PostMapping("/{playlistId}/track/{trackId}")
-  public Playlist addTrack(@PathVariable Long playlistId,@PathVariable Long trackId,@RequestParam Long userId){
-    return playlist_service.add_track(playlistId, trackId, userId);
+  public PlaylistResponseDTO addTrack(
+      @PathVariable Long playlistId,
+      @PathVariable Long trackId,
+      @AuthenticationPrincipal(errorOnInvalidType = true) User current_user)
+  {
+    return playlist_service.add_track(playlistId, trackId, current_user);
   }
 
 
   @PutMapping("/update/{id}")
-  public Playlist update_playlist(
+  public PlaylistResponseDTO update_playlist(
       @PathVariable Long id, 
       @Valid @RequestBody PlaylistRequestDTO updated,
       @AuthenticationPrincipal User current_user
