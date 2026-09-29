@@ -10,6 +10,7 @@ import com.store.app.DTOs.albumDTO.HelperAlbumDTO;
 import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Album;
+import com.store.app.entities.Artist;
 // import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
@@ -44,15 +45,18 @@ public class TrackService {
           track.getAlbum().getOwner().getName() 
           ): null;
 
-
+    List<String> artists = track.getArtists().isEmpty() ? List.of(track.getOwner().getName()) :
+      track.getArtists().stream().map(Artist::getName).collect(Collectors.toList());
+  
     return new TrackResponseDTO(
         track.getId_track(),
         track.getTitle(),
         track.getRelease_date(), 
         track.getOwner() != null ? track.getOwner().getName() : null,
         album,
-        track.getArtists() 
-        );
+        artists
+        
+    );
   }
   //functions for GET
   
@@ -125,14 +129,16 @@ public class TrackService {
   }
 
   //functions for conection with other entities
-  public Track assignAlbum(Long trackId, Long albumId){
+  public TrackResponseDTO assignAlbum(Long trackId, Long albumId){
 
     Track target_track =  track_repository.findById(trackId).orElseThrow(()-> new RuntimeException("no such track"));;
     Album target_album = album_service.findById(albumId);
 
     target_track.setAlbum(target_album);
 
-    return track_repository.save(target_track);
+    track_repository.save(target_track);
+
+    return toDTO(target_track);
   }
   
 }
