@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 // import com.store.app.DTOs.artistDTO.ArtistResponseDTO;
 import com.store.app.DTOs.userDTO.UserRequestDTO;
@@ -18,6 +19,8 @@ import com.store.app.entities.User;
 import com.store.app.enums.Role;
 import com.store.app.repositories.PlaylistRepository;
 import com.store.app.repositories.UserRepository;
+
+// import jakarta.transaction.Transactional;
 
 /**
  * UserService
@@ -147,10 +150,22 @@ public class UserService implements UserDetailsService  {
     return user_repo.save(user);
   }
 
-  public User follow_playlist(Long userID, Long playlistId){
+  @Transactional
+  public User follow_playlist(User current_user, Long playlistId){
     
-    User user = getById(userID);
+    User user = getById(current_user.getId_user());
+
     Playlist playlist = getPlayListByID(playlistId);
+
+    if (playlist.getFollowers().contains(user)) {
+     System.out.println("playlist already followed");
+    }else {
+      playlist.getFollowers().add(user);
+    }
+ 
+
+    System.out.println("playlist followers Number" + playlist.getFollowers().size());
+    playlist_repo.save(playlist);
 
     user.getFollowed_playlists().add(playlist);
     return user_repo.save(user);
