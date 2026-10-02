@@ -62,7 +62,7 @@ public class User implements UserDetails{
     joinColumns = @JoinColumn(name = "id_user"),
     inverseJoinColumns = @JoinColumn(name = "id_track")
   )
-  private List<Track> liked = new ArrayList<>();
+  private Set<Track> liked = new HashSet<>();
 
   @ManyToMany
   @JsonIgnore
@@ -71,7 +71,7 @@ public class User implements UserDetails{
     joinColumns = @JoinColumn(name = "id_user"),
     inverseJoinColumns = @JoinColumn(name = "id_artist")
   )
-  private List<Artist> followed_Artists = new ArrayList<>();
+  private Set<Artist> followed_Artists = new HashSet<>();
 
   @ManyToMany
   @JsonIgnore

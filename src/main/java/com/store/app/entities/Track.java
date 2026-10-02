@@ -1,7 +1,9 @@
 package com.store.app.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -51,10 +53,10 @@ public class Track {
   private Album album;
 
  @ManyToMany(mappedBy = "tracks")
- private List<Artist> artists  = new ArrayList<>();
+ private Set<Artist> artists  = new HashSet<>();
 
  @ManyToMany(mappedBy = "liked")
- private List<User> users_liked = new ArrayList<>();
+ private Set<User> users_liked = new HashSet<>();
  //
  // @ManyToMany(mappedBy = "playlist_tracks")
  // @JsonIgnore

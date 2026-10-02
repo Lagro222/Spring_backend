@@ -1,7 +1,9 @@
 package com.store.app.entities;
 
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,7 +46,7 @@ public class Album {
 
   @ManyToMany(mappedBy = "albums")
   @JsonIgnore
-  private List<Artist> artists = new ArrayList<>();
+  private Set<Artist> artists = new HashSet<>();
 
   @OneToMany(mappedBy = "album")
   @JsonIgnore

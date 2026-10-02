@@ -1,7 +1,9 @@
 package  com.store.app.entities;
 
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,7 +46,7 @@ public class Artist{
   inverseJoinColumns = @JoinColumn(name = "id_album")
 )
 @JsonIgnore
-private List<Album> albums = new ArrayList<>(); 
+private Set<Album> albums = new HashSet<>(); 
  
 @ManyToMany
 @JoinTable(
@@ -53,10 +55,10 @@ private List<Album> albums = new ArrayList<>();
   inverseJoinColumns = @JoinColumn( name = "id_track") 
 )
 @JsonIgnore
-private List<Track> tracks = new ArrayList<>();
+private Set<Track> tracks = new HashSet<>();
 
 @ManyToMany(mappedBy = "followed_Artists")
 @JsonIgnore
-private List<User> followers = new ArrayList<>();
+private Set<User> followers = new HashSet<>();
 
 }
