@@ -2,6 +2,7 @@ package  com.store.app.services;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,10 @@ import com.store.app.DTOs.artistDTO.ArtistRequestDTO;
 import com.store.app.entities.Album;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
+// import com.store.app.entities.User;
+// import com.store.app.enums.Role;
 import com.store.app.repositories.ArtistRepository;
+// import com.store.app.repositories.UserRepository;
 
 /**
  * ArtistService
@@ -27,15 +31,20 @@ public class ArtistService {
  @Autowired
  private AlbumService album_service;
 
+ // @Autowired
+ // private UserRepository user_repo;
+ //
  public List<Artist> getAll(){return artist_repo.findAll();}
 
  public Artist getById(Long id ){return artist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such artist!!"));}
- public List<Artist> getByName(String name){return artist_repo.findByName(name);}
+ public List<Artist> getByName(String name){
+    return artist_repo.findByUserNameContainingIgnoreCase(name); 
+ }
 
  public Artist create_artist(ArtistRequestDTO artist){
    Artist new_artist = new Artist();
 
-   new_artist.setName(artist.getName());
+   // new_artist.setName(artist.getName());
    new_artist.setGenre(artist.getGenre());
    new_artist.setCountry(artist.getCountry());
 
@@ -46,7 +55,7 @@ public class ArtistService {
 
    Artist target =  artist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such artist"));
 
-   target.setName(new_args.getName());
+   // target.setName(new_args.getName());
    target.setCountry(new_args.getCountry());
    target.setGenre(new_args.getGenre());
    

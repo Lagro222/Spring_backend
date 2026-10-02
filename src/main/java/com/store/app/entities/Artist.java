@@ -1,8 +1,8 @@
 package  com.store.app.entities;
 
-import java.util.List;
+// import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.HashSet;
 
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 // import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 // import jakarta.validation.Valid;
@@ -35,7 +36,10 @@ public class Artist{
  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_artist ;
 
- private String name ;
+ @OneToOne()
+ @JoinColumn(name = "id_user" , unique = true)
+ private User user;
+ // private String name = user.getName() ;
  private String genre;
  private String country;
 
