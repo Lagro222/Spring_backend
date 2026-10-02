@@ -1,6 +1,7 @@
 package  com.store.app.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,32 +46,32 @@ public class UserController {
   public User getById(Long id){return user_service.getById(id);}
 
   @GetMapping("/{id}/liked")
-  public List<Track> getLikedTracks(@PathVariable Long id){
+  public Set<Track> getLikedTracks(@PathVariable Long id){
     return user_service.getLikedTracks(id);
   }
 
   @GetMapping("/{userId}/follow/artists")
-  public List<Artist> getFollowed_artists(@PathVariable Long userId){
+  public Set<Artist> getFollowed_artists(@PathVariable Long userId){
     return user_service.getFollowed_artist(userId);
   }
   
   @GetMapping("/{userId}/follow/playlists")
-  public List<Playlist> getFollowed_playlists(@PathVariable Long userId){
+  public Set<Playlist> getFollowed_playlists(@PathVariable Long userId){
     return user_service.getFollowed_playlists(userId);
   }
 
   //POST
 
-  @PostMapping("/{userId}/like/{trackId}")
-  public User likedTrack(@PathVariable Long trackId,@PathVariable Long userId){
-    return user_service.likedTrack(trackId, userId);
+  @PostMapping("/like/{trackId}")
+  public User likedTrack(@PathVariable Long trackId,@AuthenticationPrincipal User current_user){
+    return user_service.likedTrack(trackId, current_user.getId_user());
   }
   //
-  // @PostMapping("/follow/artist/{artistId}")
-  // public User follow_artist(@AuthenticationPrincipal User current_user,@PathVariable Long artistId){
-  //   return user_service.follow_artist(current_user, artistId);
-  // }
-  //
+  @PostMapping("/follow/artist/{artistId}")
+  public User follow_artist(@AuthenticationPrincipal User current_user,@PathVariable Long artistId){
+    return user_service.follow_artist(current_user, artistId);
+  }
+
   @PostMapping("/follow/playlist/{playlistId}")
   public User follow_playlist( @AuthenticationPrincipal(errorOnInvalidType = true) User current_user,@PathVariable Long playlistId){
     return user_service.follow_playlist(current_user, playlistId);

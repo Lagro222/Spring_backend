@@ -1,6 +1,7 @@
 package  com.store.app.services;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,17 +129,20 @@ public class UserService implements UserDetailsService  {
 
   }
 
-  public List<Track> getLikedTracks(Long userId){
+  public Set<Track> getLikedTracks(Long userId){
     User target_user = getById(userId);
     return target_user.getLiked();
   }
 
   //follow/unfollow features
-  public User follow_artist(Long userId, Long artistId){
-    User user = getById(userId);
+  public User follow_artist(User current_user, Long artistId){
+    User user = getById(current_user.getId_user());
     Artist artist = artist_service.getById(artistId);
 
-    user.getFollowed_Artists().add(artist);
+    if (!user.getFollowed_Artists().contains(artist)) {
+      user.getFollowed_Artists().add(artist);
+    }
+    
     return user_repo.save(user);
   }
 
@@ -181,12 +185,12 @@ public class UserService implements UserDetailsService  {
   }
 
 
-  public List<Artist> getFollowed_artist(Long userId){
+  public Set<Artist> getFollowed_artist(Long userId){
     User user = getById(userId);
     return user.getFollowed_Artists();
   }
 
-  public List<Playlist> getFollowed_playlists(Long userId){
+  public Set<Playlist> getFollowed_playlists(Long userId){
     User user = getById(userId);
     return user.getFollowed_playlists();
   }

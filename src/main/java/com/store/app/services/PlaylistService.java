@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
 import com.store.app.DTOs.playlistDTO.PlaylistResponseDTO;
 import com.store.app.DTOs.tracksDTO.HelperTrackDTO;
+import com.store.app.entities.Artist;
 // import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Playlist;
 import com.store.app.entities.PlaylistTrack;
@@ -68,7 +69,8 @@ public class PlaylistService {
       .map(playlistTrack -> new HelperTrackDTO(
             playlistTrack.getTrack().getTitle(),
             playlistTrack.getTrack().getArtists().isEmpty() ? 
-            playlistTrack.getTrack().getOwner().getName() : playlistTrack.getTrack().getArtists().get(0).getName(),
+            playlistTrack.getTrack().getOwner().getName() : playlistTrack.getTrack().getArtists().stream()
+            .map(Artist::getName).collect(Collectors.joining(", ")),
             playlistTrack.getTrack().getAlbum() != null ? playlistTrack.getTrack().getAlbum().getTitle() : null
             ) )
       .collect(Collectors.toList());

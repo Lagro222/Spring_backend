@@ -1,6 +1,7 @@
 package com.store.app.DTOs.userDTO;
 
-import java.util.List;
+// import java.util.List;
+import java.util.Set;
 
 import com.store.app.entities.Artist;
 // import com.store.app.DTOs.artistDTO.ArtistResponseDTO;
@@ -16,5 +17,5 @@ public class UserResponseDTO {
   private Long id;
   private String name;
   private String firstname;
-  private List<Artist> following_artists; 
+  private Set<Artist> following_artists; 
 }

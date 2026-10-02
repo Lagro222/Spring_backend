@@ -1,6 +1,7 @@
 package com.store.app.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,10 +39,10 @@ public class ArtistController {
   public Artist getById(@PathVariable Long id){return artist_service.getById(id);}
 
   @GetMapping("/search/{name}")
-  public List<Artist> getByName(@PathVariable String name){return artist_service.getByName(name);}
+  public Set<Artist> getByName(@PathVariable String name){return artist_service.getByName(name);}
 
   @GetMapping("/{artistId}/tracks")
-  public List<Track> getTracksByArtist(@PathVariable Long artistId){
+  public Set<Track> getTracksByArtist(@PathVariable Long artistId){
     return artist_service.getTraksByArtist(artistId);
   }
 

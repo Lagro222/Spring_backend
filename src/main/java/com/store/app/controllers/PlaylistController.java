@@ -16,7 +16,7 @@ import jakarta.validation.Valid;
 
 import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
 import com.store.app.DTOs.playlistDTO.PlaylistResponseDTO;
-import com.store.app.entities.Playlist;
+// import com.store.app.entities.Playlist;
 import com.store.app.entities.User;
 // import com.store.app.enums.PlaylistType;
 import com.store.app.services.PlaylistService;

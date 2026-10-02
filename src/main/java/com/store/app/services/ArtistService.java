@@ -1,6 +1,7 @@
 package  com.store.app.services;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,7 @@ public class ArtistService {
     return artist_repo.save(artist);
   }
 
-  public List<Track> getTraksByArtist(Long artistId){
+  public Set<Track> getTraksByArtist(Long artistId){
     Artist artist = getById(artistId);
     return artist.getTracks();
   }
