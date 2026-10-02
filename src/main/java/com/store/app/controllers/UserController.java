@@ -65,15 +65,15 @@ public class UserController {
   public User likedTrack(@PathVariable Long trackId,@PathVariable Long userId){
     return user_service.likedTrack(trackId, userId);
   }
-
-  @PostMapping("/{userId}/follow/artist/{artistId}")
-  public User follow_artist(@PathVariable Long userId,@PathVariable Long artistId){
-    return user_service.follow_artist(userId, artistId);
-  }
-
-  @PostMapping("/{userId}/follow/playlist/{playlistId}")
-  public User follow_playlist(@PathVariable Long userId,@PathVariable Long playlistId){
-    return user_service.follow_playlist(userId, playlistId);
+  //
+  // @PostMapping("/follow/artist/{artistId}")
+  // public User follow_artist(@AuthenticationPrincipal User current_user,@PathVariable Long artistId){
+  //   return user_service.follow_artist(current_user, artistId);
+  // }
+  //
+  @PostMapping("/follow/playlist/{playlistId}")
+  public User follow_playlist( @AuthenticationPrincipal(errorOnInvalidType = true) User current_user,@PathVariable Long playlistId){
+    return user_service.follow_playlist(current_user, playlistId);
   }
 
   //PUT
@@ -81,7 +81,7 @@ public class UserController {
   public User update_user(
       @PathVariable Long userId, 
       @Valid @RequestBody UserRequestDTO updated,
-      @AuthenticationPrincipal  User current_user
+      @AuthenticationPrincipal(errorOnInvalidType = true)  User current_user
   ){
     return user_service.update_user(userId, updated,current_user);
   }
