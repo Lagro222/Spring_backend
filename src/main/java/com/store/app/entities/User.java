@@ -2,7 +2,9 @@ package com.store.app.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Collection;
+import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -78,7 +80,7 @@ public class User implements UserDetails{
     joinColumns = @JoinColumn(name = "id_user"),
     inverseJoinColumns = @JoinColumn(name = "id_playlist")
   )
-  private List<Playlist> followed_playlists = new ArrayList<>();
+  private Set<Playlist> followed_playlists = new HashSet<>();
   //to avoid conflict for remove() function
   @Override
   public boolean equals(Object o){
