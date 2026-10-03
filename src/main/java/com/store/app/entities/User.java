@@ -1,6 +1,6 @@
 package com.store.app.entities;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.Collection;
@@ -11,10 +11,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+// import com.store.app.entities.entityListners.UserEntityListener;
 import com.store.app.enums.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+// import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +35,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// @EntityListeners(UserEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
