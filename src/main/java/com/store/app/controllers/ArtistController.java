@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.store.app.DTOs.artistDTO.ArtistRequestDTO;
 import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
+import com.store.app.entities.User;
 import com.store.app.services.ArtistService;
 
 import jakarta.validation.Valid;
@@ -39,7 +41,7 @@ public class ArtistController {
   public Artist getById(@PathVariable Long id){return artist_service.getById(id);}
 
   @GetMapping("/search/{name}")
-  public Set<Artist> getByName(@PathVariable String name){return artist_service.getByName(name);}
+  public List<Artist> getByName(@PathVariable String name){return artist_service.getByName(name);}
 
   @GetMapping("/{artistId}/tracks")
   public Set<Track> getTracksByArtist(@PathVariable Long artistId){
@@ -47,9 +49,11 @@ public class ArtistController {
   }
 
 
-  @PostMapping
-  public Artist create(@Valid @RequestBody ArtistRequestDTO artist){
-    return artist_service.create_artist(artist);
+  @PostMapping("/create")
+  public Artist create(
+      @Valid @RequestBody ArtistRequestDTO artist ,
+      @AuthenticationPrincipal  User current_user){
+    return artist_service.create_artist(artist,current_user);
   }
 
   @PostMapping("/{artistId}/track/{trackId}")
