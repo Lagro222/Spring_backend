@@ -47,7 +47,7 @@ public class SecurityConfig {
           .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
 
           //admin
-          .requestMatchers(HttpMethod.POST,"/artists/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.POST,"/artists/**").authenticated()
           .requestMatchers(HttpMethod.PUT,"/artists/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.DELETE,"/artists/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.DELETE,"/albums/**").hasRole("ADMIN")
