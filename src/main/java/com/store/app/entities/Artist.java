@@ -35,13 +35,14 @@ public class Artist{
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_artist ;
-
- @OneToOne()
- @JoinColumn(name = "id_user" , unique = true)
- private User user;
- // private String name = user.getName() ;
+ //
+ // @OneToOne()
+ // @JoinColumn(name = "id_user" , unique = true)
+ // private User user;
+ private String name ;
  private String genre;
  private String country;
+ Boolean verrified = false; 
 
 @ManyToMany
 @JoinTable(
