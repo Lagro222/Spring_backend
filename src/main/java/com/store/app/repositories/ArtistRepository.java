@@ -1,6 +1,7 @@
 package com.store.app.repositories;
 
 import java.util.List;
+// import java.util.Optional;
 
 // import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.store.app.entities.Artist;
+// import com.store.app.entities.User;
 
 /**
  * ArtistRepository
@@ -16,6 +18,5 @@ import com.store.app.entities.Artist;
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist,Long> {
 
-  List<Artist> findByUserNameContainingIgnoreCase(String name);
-  
+  List<Artist> findByName(String name);
 }
