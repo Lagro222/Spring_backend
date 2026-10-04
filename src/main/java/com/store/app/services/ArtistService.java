@@ -21,6 +21,8 @@ import com.store.app.repositories.ArtistRepository;
 import com.store.app.repositories.UserArtistLinkRepository;
 import com.store.app.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 /**
  * ArtistService
  */
@@ -46,11 +48,15 @@ public class ArtistService {
 
  public Artist getById(Long id ){return artist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such artist!!"));}
  public List<Artist> getByName(String name){
-    return artist_repo.findByName(name); 
+    return artist_repo.findByNameContaining(name); 
  }
 
  public Artist create_artist(ArtistRequestDTO artist, User current_user){
    Artist new_artist = new Artist();
+
+   if(artist_repo.findByName(artist.getName()).isPresent()){
+     throw new RuntimeException("Artist with name " + artist.getName() + "already exists !!");
+   }
 
    new_artist.setName(artist.getName());
    new_artist.setGenre(artist.getGenre());
@@ -74,15 +80,22 @@ public boolean canUserUpdateArtist(User user, Artist artist){
     return userArtistLink_repo.findByUserAndArtist(user, artist).map(link -> link.getRole() != ArtistRole.MEMBER).orElse(false);
 }
 
+@Transactional
  public Artist update(Long id , ArtistRequestDTO new_args , User current_user){
 
    Artist target =  getById(id);
+   User user = user_repo.findById(current_user.getId_user()).orElseThrow(() -> new RuntimeException("no such user"));
+  
+   System.out.println("user id :" + user.getId_user());
+
+   if(!canUserUpdateArtist(user, target)){
+     throw new RuntimeException("you are not allowed to update this artist profile");
+   }
 
    target.setName(new_args.getName());
    target.setCountry(new_args.getCountry());
    target.setGenre(new_args.getGenre());
   
-    
 
    return artist_repo.save(target); 
 

@@ -47,9 +47,7 @@ public class SecurityConfig {
           .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
 
           //admin
-          .requestMatchers(HttpMethod.POST,"/artists/**").authenticated()
-          .requestMatchers(HttpMethod.PUT,"/artists/**").hasRole("ADMIN")
-          .requestMatchers(HttpMethod.DELETE,"/artists/**").hasRole("ADMIN")
+
           .requestMatchers(HttpMethod.DELETE,"/albums/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.DELETE,"/tracks/**").hasRole("ADMIN")
           .requestMatchers(HttpMethod.DELETE,"/playlists/**").hasRole("ADMIN")
@@ -62,7 +60,10 @@ public class SecurityConfig {
           .requestMatchers(HttpMethod.PUT,"/albums/**").hasAnyRole("ARTIST?","ADMIN")
 
           //any logged in user
-         .requestMatchers(HttpMethod.POST,"/playlists/**").authenticated()
+          .requestMatchers(HttpMethod.POST,"/artists/**").authenticated()
+          .requestMatchers(HttpMethod.PUT,"/artists/**").authenticated()
+          .requestMatchers(HttpMethod.DELETE,"/artists/**").authenticated()
+          .requestMatchers(HttpMethod.POST,"/playlists/**").authenticated()
          .requestMatchers(HttpMethod.POST,"/playlists/create").authenticated()
          .requestMatchers(HttpMethod.PUT,"/playlists/**").authenticated()
          .requestMatchers(HttpMethod.POST, "/users/**").authenticated()

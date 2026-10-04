@@ -68,8 +68,11 @@ public class ArtistController {
 
 
   @PutMapping("/update/{id}")
-  public Artist update_artist(@PathVariable Long id, @Valid @RequestBody ArtistRequestDTO updated){
-    return artist_service.update(id,updated);
+  public Artist update_artist(
+      @PathVariable Long id, 
+      @Valid @RequestBody ArtistRequestDTO updated,
+      @AuthenticationPrincipal User current_user){
+    return artist_service.update(id,updated,current_user);
   }
 
 

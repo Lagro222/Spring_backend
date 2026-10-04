@@ -2,6 +2,7 @@ package com.store.app.repositories;
 
 import java.util.List;
 // import java.util.Optional;
+import java.util.Optional;
 
 // import java.util.List;
 
@@ -18,5 +19,6 @@ import com.store.app.entities.Artist;
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist,Long> {
 
-  List<Artist> findByName(String name);
+  Optional<Artist> findByName(String name);
+  List<Artist> findByNameContaining(String name);
 }
