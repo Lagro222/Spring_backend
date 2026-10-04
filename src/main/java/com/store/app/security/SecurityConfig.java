@@ -54,7 +54,7 @@ public class SecurityConfig {
           
           //artist and admin 
   
-          .requestMatchers(HttpMethod.POST,"/tracks/**").hasAnyRole("ARTIST","ADMIN")
+          .requestMatchers(HttpMethod.POST,"/tracks/**").authenticated()
           .requestMatchers(HttpMethod.PUT,"/tracks/**").hasAnyRole("ARTIST","ADMIN")
           .requestMatchers(HttpMethod.POST,"/albums/**").hasAnyRole("ARTIST","ADMIN")
           .requestMatchers(HttpMethod.PUT,"/albums/**").hasAnyRole("ARTIST?","ADMIN")
