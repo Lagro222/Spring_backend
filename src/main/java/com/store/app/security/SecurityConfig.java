@@ -56,7 +56,7 @@ public class SecurityConfig {
   
           .requestMatchers(HttpMethod.POST,"/tracks/**").authenticated()
           .requestMatchers(HttpMethod.PUT,"/tracks/**").hasAnyRole("ARTIST","ADMIN")
-          .requestMatchers(HttpMethod.POST,"/albums/**").hasAnyRole("ARTIST","ADMIN")
+          .requestMatchers(HttpMethod.POST,"/albums/**").authenticated()
           .requestMatchers(HttpMethod.PUT,"/albums/**").hasAnyRole("ARTIST?","ADMIN")
 
           //any logged in user
