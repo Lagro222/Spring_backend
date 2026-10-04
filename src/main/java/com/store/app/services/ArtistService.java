@@ -70,14 +70,20 @@ public class ArtistService {
     return artist_saved;
  }
 
- public Artist update(Long id , ArtistRequestDTO new_args){
+public boolean canUserUpdateArtist(User user, Artist artist){
+    return userArtistLink_repo.findByUserAndArtist(user, artist).map(link -> link.getRole() != ArtistRole.MEMBER).orElse(false);
+}
 
-   Artist target =  artist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such artist"));
+ public Artist update(Long id , ArtistRequestDTO new_args , User current_user){
 
-   // target.setName(new_args.getName());
+   Artist target =  getById(id);
+
+   target.setName(new_args.getName());
    target.setCountry(new_args.getCountry());
    target.setGenre(new_args.getGenre());
-   
+  
+    
+
    return artist_repo.save(target); 
 
  }
