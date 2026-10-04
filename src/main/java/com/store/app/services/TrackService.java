@@ -14,9 +14,14 @@ import com.store.app.entities.Artist;
 // import com.store.app.entities.Artist;
 import com.store.app.entities.Track;
 import com.store.app.entities.User;
+import com.store.app.entities.UserArtistLink;
+import com.store.app.enums.ArtistRole;
 import com.store.app.enums.Role;
+import com.store.app.repositories.ArtistRepository;
 // import com.store.app.entities.User;
 import com.store.app.repositories.TrackRepository;
+import com.store.app.repositories.UserArtistLinkRepository;
+import com.store.app.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +36,9 @@ public class TrackService {
 
   public final TrackRepository track_repository;
   public final AlbumService album_service;
+  public final UserArtistLinkRepository link_repo;
+  public final ArtistRepository artist_repo;
+  public final UserRepository user_repo;
   // public final ArtistService artist_service;
   // public final UserService userService;
 
@@ -82,23 +90,30 @@ public class TrackService {
     return toDTO(track);
   }
 
+  public boolean isOwner(User user, Track track){
+    return link_repo.findByUserAndArtist(user, track.getOwner())
+      .map(link -> link.getRole() == ArtistRole.OWNER).orElse(false);
+  }
   //crud functions
   public TrackResponseDTO create_track(TrackRequestDTO new_track, User current_user){
 
     Track track = new Track();
+    UserArtistLink link = link_repo.findByUser(current_user);
     track.setTitle(new_track.getTitle());
     track.setRelease_date(new_track.getRelease_date());
-    track.setOwner(current_user);
+    track.setOwner(link.getArtist());
 
     track_repository.save(track);
 
     return toDTO(track);
   }
+
+
   public TrackResponseDTO update_track(Long id , TrackRequestDTO updating, User current_user){
     
     Track exist = track_repository.findById(id).orElseThrow(()-> new RuntimeException("no such track // updating stoped."));
-
-    boolean is_owner = exist.getOwner().getId_user().equals(current_user.getId_user());
+   
+    boolean is_owner = isOwner(current_user, exist);
     boolean is_admin = current_user.getRole() == Role.ADMIN;
 
     if(!is_owner && !is_admin){
@@ -117,7 +132,7 @@ public class TrackService {
     
     Track exist = track_repository.findById(id).orElseThrow(() -> new RuntimeException("no such track // deleting stoped."));
     
-    boolean is_owner = exist.getOwner().getId_user().equals(current_user.getId_user());
+    boolean is_owner = isOwner(current_user, exist);
     boolean is_admin = current_user.getRole() == Role.ADMIN;
     
     if(!is_owner && !is_admin){
@@ -129,10 +144,14 @@ public class TrackService {
   }
 
   //functions for conection with other entities
-  public TrackResponseDTO assignAlbum(Long trackId, Long albumId){
+  public TrackResponseDTO assignAlbum(Long trackId, Long albumId,User current_user){
 
     Track target_track =  track_repository.findById(trackId).orElseThrow(()-> new RuntimeException("no such track"));;
     Album target_album = album_service.findById(albumId);
+    User target_user = user_repo.findById(current_user.getId_user()).orElseThrow(() -> new RuntimeException("no such user!!"));
+    if(!isOwner(target_user, target_track)){
+      throw new RuntimeException("you not allowet to do this track request");
+    }
 
     target_track.setAlbum(target_album);
 

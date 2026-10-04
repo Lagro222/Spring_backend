@@ -46,7 +46,7 @@ public class Track {
 
   @ManyToOne
   @JoinColumn(name= "owner_id")
-  private User owner;
+  private Artist owner;
 
   @ManyToOne
   @JoinColumn(name = "album_id")
