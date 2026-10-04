@@ -13,9 +13,12 @@ import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Album;
 import com.store.app.entities.Artist;
 import com.store.app.entities.User;
+import com.store.app.entities.UserArtistLink;
+import com.store.app.enums.ArtistRole;
 import com.store.app.enums.Role;
 import com.store.app.repositories.AlbumRepository;
 // import com.store.app.repositories.TrackRepository;
+import com.store.app.repositories.UserArtistLinkRepository;
 
 /**
  * AlbumService
@@ -27,6 +30,8 @@ public class AlbumService {
   @Autowired
   private AlbumRepository album_repo;
 
+  @Autowired
+  private UserArtistLinkRepository link_repo;
   // @Autowired
   // private TrackRepository track_repo;
 
@@ -97,22 +102,32 @@ public class AlbumService {
 
   }
 
-  public AlbumResponseDTO create(AlbumRequestDTO album , User owner){
+  public AlbumResponseDTO create(AlbumRequestDTO album , User current_user){
     
     Album new_album = new Album();
+
+    UserArtistLink link = link_repo.findByUser(current_user);
+
+    
+
     new_album.setTitle(album.getTitle());
     new_album.setReleaseYear(album.getReleaseYear());
-    new_album.setOwner(owner);
+    new_album.setOwner(link.getArtist());
 
     album_repo.save(new_album);
     return toDTO(new_album);
   } 
 
+  public boolean isOwner(User current_user, Album album){
+    return link_repo.findByUserAndArtist(current_user, album.getOwner()).map(link -> link.getRole() != ArtistRole.MEMBER).orElse(false);
+  }
+
+
   public AlbumResponseDTO update( Long id,AlbumRequestDTO album, User current_user){
 
     Album exist = album_repo.findById(id).orElseThrow(()-> new RuntimeException("no such album // updating stoped."));
 
-    boolean is_owner = exist.getOwner().getId_user().equals(current_user.getId_user());
+    boolean is_owner = isOwner(current_user,exist);
     boolean is_admin = current_user.getRole() == Role.ADMIN;
     
     if(!is_owner && !is_admin){
@@ -131,7 +146,7 @@ public class AlbumService {
 
     Album target = album_repo.findById(id).orElseThrow(() -> new RuntimeException("no such album // deleting stoped."));
     
-    boolean is_owner = target.getOwner().getId_user().equals(current_user.getId_user());
+    boolean is_owner = isOwner(current_user, target);
     boolean is_admin = current_user.getRole() == Role.ADMIN;
 
     if(!is_owner && !is_admin){

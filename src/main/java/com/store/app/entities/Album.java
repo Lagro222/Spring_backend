@@ -15,8 +15,8 @@ import jakarta.persistence.ManyToOne;
 // import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+// import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -34,15 +34,12 @@ public class Album {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_album;
 
-  @NotBlank(message = "Please enter a valid title")
   private String title;
-
-  @NotNull(message = "Please enter a valid release year")
   private Integer releaseYear;
 
   @ManyToOne
   @JoinColumn(name = "owner_id")
-  private User owner;
+  private Artist owner;
 
   @ManyToMany(mappedBy = "albums")
   @JsonIgnore
