@@ -57,8 +57,8 @@ public class ArtistController {
   }
 
   @PostMapping("/{artistId}/track/{trackId}")
-  public Artist addTrack(@PathVariable Long artistId, @PathVariable Long trackId) {
-    return artist_service.addTrack(artistId, trackId);
+  public Artist addTrack(@PathVariable Long artistId, @PathVariable Long trackId,@AuthenticationPrincipal User current_user) {
+    return artist_service.addTrack(artistId, trackId,current_user);
   }
 
   @PostMapping("/{artistId}/album/{albumId}")

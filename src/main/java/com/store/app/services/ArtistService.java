@@ -46,6 +46,10 @@ public class ArtistService {
 
  public List<Artist> getAll(){return artist_repo.findAll();}
 
+ private User getUserById(Long id){
+  return user_repo.findById(id).orElseThrow(() -> new RuntimeException("no such user"));
+ }
+
  public Artist getById(Long id ){return artist_repo.findById(id).orElseThrow(() -> new RuntimeException("no such artist!!"));}
  public List<Artist> getByName(String name){
     return artist_repo.findByNameContaining(name); 
@@ -63,8 +67,7 @@ public class ArtistService {
    new_artist.setCountry(artist.getCountry());
 
    Artist artist_saved = artist_repo.save(new_artist);
-   User user = user_repo.findById(current_user.getId_user())
-     .orElseThrow(()-> new RuntimeException("no such user!!"));
+   User user = getUserById(current_user.getId_user());
 
    UserArtistLink link = new UserArtistLink();
    link.setUser(user);
@@ -75,20 +78,19 @@ public class ArtistService {
 
     return artist_saved;
  }
-
-public boolean canUserUpdateArtist(User user, Artist artist){
+public boolean UserControlArtist(User user, Artist artist){
     return userArtistLink_repo.findByUserAndArtist(user, artist).map(link -> link.getRole() != ArtistRole.MEMBER).orElse(false);
 }
 
-@Transactional
+// @Transactional
  public Artist update(Long id , ArtistRequestDTO new_args , User current_user){
 
    Artist target =  getById(id);
-   User user = user_repo.findById(current_user.getId_user()).orElseThrow(() -> new RuntimeException("no such user"));
+   User user = getUserById(current_user.getId_user()); 
   
    System.out.println("user id :" + user.getId_user());
 
-   if(!canUserUpdateArtist(user, target)){
+   if(!UserControlArtist(user, target)){
      throw new RuntimeException("you are not allowed to update this artist profile");
    }
 
@@ -108,9 +110,14 @@ public boolean canUserUpdateArtist(User user, Artist artist){
 
  }
 
- public Artist addTrack(Long artistId, Long trackId) {
+ public Artist addTrack(Long artistId, Long trackId,User current_user) {
     Artist artist = getById(artistId);
+    User  user = getUserById(current_user.getId_user());
     Track track = track_service.findById(trackId);
+    
+    if(!UserControlArtist(user, artist)){
+      throw new RuntimeException("you are not allowed to add this track to this artist profile");
+    }
     artist.getTracks().add(track);
     return artist_repo.save(artist);
   }
