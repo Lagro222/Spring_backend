@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
-import com.store.app.entities.Track;
+// import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.services.TrackService;
 
@@ -65,8 +65,8 @@ public class TrackController {
   }
 
   @PostMapping("/{trackId}/album/{albumID}")
-  public TrackResponseDTO addAlbum(@PathVariable Long trackId, @PathVariable Long albumID){
-    return track_service.assignAlbum(trackId, albumID);
+  public TrackResponseDTO addAlbum(@PathVariable Long trackId, @PathVariable Long albumID,@AuthenticationPrincipal User current_user){
+    return track_service.assignAlbum(trackId, albumID,current_user);
   }
   //
   // @PostMapping("/{trackID}/like/{userId}")
