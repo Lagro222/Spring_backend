@@ -46,14 +46,18 @@ public class UserService implements UserDetailsService  {
     return new UserResponseDTO(
         user.getId_user(),
         user.getName(),
-        user.getFirstname(),
-        user.getFollowed_Artists()
+        user.getFirstname()
         ); 
   } 
 
 
   //basic get functions
-  public List<User> getAll(){return user_repo.findAll();}
+  public List<UserResponseDTO> getAll(){
+    return user_repo.findAll()
+      .stream()
+      .map(this::toDto)
+      .collect(Collectors.toList());
+  }
   public List<UserResponseDTO> SearchAll(String name){
     List<User> users = user_repo.findByName(name);
     return users.stream().map(this::toDto).collect(Collectors.toList());
@@ -66,16 +70,19 @@ public class UserService implements UserDetailsService  {
       .map(this::toDto)
       .collect(Collectors.toList());
   }
-  public User getById(Long id){return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));}
+  public User getById(Long id){
+    return user_repo.findById(id).orElseThrow(()-> new RuntimeException("no such user"));
+  }
   public Playlist getPlayListByID(Long playlistId){
     Playlist playlist = playlist_repo.findById(playlistId).orElseThrow(() -> new RuntimeException("EROR: playlist not found!!"));
     return playlist;
   }
 
-  public User create_user(User new_user){
-    return user_repo.save(new_user);
+  public UserResponseDTO create_user(User new_user){
+    User user = user_repo.save(new_user);
+    return toDto(user);
   }
-  public User update_user(Long user_id, UserRequestDTO updating, User current_user){
+  public UserResponseDTO update_user(Long user_id, UserRequestDTO updating, User current_user){
     
     boolean is_owner = current_user.getId_user().equals(user_id);
     boolean is_admin = current_user.getRole() == Role.ADMIN;
@@ -89,7 +96,8 @@ public class UserService implements UserDetailsService  {
     target_user.setEmail(updating.getEmail());
     target_user.setFirstname(updating.getFirstname());
     
-    return user_repo.save(target_user);
+     User user = user_repo.save(target_user);
+     return toDto(user);
 
   }
 
@@ -107,25 +115,28 @@ public class UserService implements UserDetailsService  {
   }
 
   //like/unlike feature
-  public User likedTrack(Long trackId, Long userId){
+  public UserResponseDTO likedTrack(Long trackId, Long userId){
 
     User target_user = getById(userId);
     Track target_track = track_service.findById(trackId);
 
     target_user.getLiked().add(target_track);
 
-    return user_repo.save(target_user);
+    User user = user_repo.save(target_user);
+
+    return toDto(user);
 
   }
 
-  public User unlikedTrack(Long trackId, Long userId){
+  public UserResponseDTO unlikedTrack(Long trackId, Long userId ){
 
     User target_user = getById(userId);
     Track target_track = track_service.findById(trackId);
 
     target_user.getLiked().remove(target_track);
 
-    return user_repo.save(target_user);
+    User user = user_repo.save(target_user);
+    return toDto(user);
 
   }
 
@@ -135,7 +146,7 @@ public class UserService implements UserDetailsService  {
   }
 
   //follow/unfollow features
-  public User follow_artist(User current_user, Long artistId){
+  public UserResponseDTO follow_artist(User current_user, Long artistId){
     User user = getById(current_user.getId_user());
     Artist artist = artist_service.getById(artistId);
 
@@ -143,19 +154,21 @@ public class UserService implements UserDetailsService  {
       user.getFollowed_Artists().add(artist);
     }
     
-    return user_repo.save(user);
+    User user = user_repo.save(user);
+    return toDto(user);
   }
 
-  public User unfollow_artist(Long userId, Long artistId){
+  public UserResponseDTO unfollow_artist(Long userId, Long artistId){
     User user = getById(userId);
     Artist artist = artist_service.getById(artistId);
 
     user.getFollowed_Artists().remove(artist);
-    return user_repo.save(user);
+    User user =  user_repo.save(user);
+    return toDto(user);
   }
 
   @Transactional
-  public User follow_playlist(User current_user, Long playlistId){
+  public UserResponseDTO follow_playlist(User current_user, Long playlistId){
     
     User user = getById(current_user.getId_user());
 
@@ -172,16 +185,18 @@ public class UserService implements UserDetailsService  {
     playlist_repo.save(playlist);
 
     user.getFollowed_playlists().add(playlist);
-    return user_repo.save(user);
+    User save_user =  user_repo.save(user);
+    return toDto(save_user);
   }
 
-  public User unfollow_playlist(Long userId,Long playlistId){
+  public UserResponseDTO unfollow_playlist(Long userId,Long playlistId){
     
     User user = getById(userId);
     Playlist playlist = getPlayListByID(playlistId);
 
     user.getFollowed_playlists().remove(playlist);
-    return user_repo.save(user);
+     User saved_user = user_repo.save(user);
+     return toDto(saved_user);
   }
 
 

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -51,6 +51,7 @@ public class User implements UserDetails{
   private String firstname;
  
   @Column(unique = true)
+  @JsonProperty("email")
   private String email;
 
   @Enumerated(EnumType.STRING)
@@ -113,6 +114,7 @@ public class User implements UserDetails{
   }
 
   @Override
+  @JsonIgnore
   public String getUsername() {
     return email;
   }

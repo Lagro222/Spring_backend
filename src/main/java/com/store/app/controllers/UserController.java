@@ -37,7 +37,7 @@ public class UserController {
 
   //GET
   @GetMapping
-  public List<User> getAll(){return user_service.getAll();}
+  public List<UserResponseDTO> getAll(){return user_service.getAll();}
 
   @GetMapping("/search/{name}")
   public List<UserResponseDTO> getByName(@PathVariable String name){ return user_service.searchAritsts(name);}
@@ -63,23 +63,25 @@ public class UserController {
   //POST
 
   @PostMapping("/like/{trackId}")
-  public User likedTrack(@PathVariable Long trackId,@AuthenticationPrincipal User current_user){
+  public UserResponseDTO likedTrack(@PathVariable Long trackId,@AuthenticationPrincipal User current_user){
     return user_service.likedTrack(trackId, current_user.getId_user());
   }
   //
   @PostMapping("/follow/artist/{artistId}")
-  public User follow_artist(@AuthenticationPrincipal User current_user,@PathVariable Long artistId){
+  public UserResponseDTO follow_artist(@AuthenticationPrincipal User current_user,@PathVariable Long artistId){
     return user_service.follow_artist(current_user, artistId);
   }
 
   @PostMapping("/follow/playlist/{playlistId}")
-  public User follow_playlist( @AuthenticationPrincipal(errorOnInvalidType = true) User current_user,@PathVariable Long playlistId){
+  public UserResponseDTO follow_playlist( 
+      @AuthenticationPrincipal(errorOnInvalidType = true) User current_user,
+      @PathVariable Long playlistId){
     return user_service.follow_playlist(current_user, playlistId);
   }
 
   //PUT
   @PutMapping("/update/{userId}")
-  public User update_user(
+  public UserResponseDTO update_user(
       @PathVariable Long userId, 
       @Valid @RequestBody UserRequestDTO updated,
       @AuthenticationPrincipal(errorOnInvalidType = true)  User current_user
@@ -89,8 +91,13 @@ public class UserController {
 
   //DELETE
   @DeleteMapping("/{userId}/follow/artist/{artistId}")
-  public User unfollow_artist(@PathVariable Long userId,@PathVariable Long artistId){
+  public UserResponseDTO unfollow_artist(@PathVariable Long userId,@PathVariable Long artistId){
     return user_service.unfollow_artist(userId, artistId);
   }
 
+  @DeleteMapping("{userId}/unfollow/playlist/{playlistId}")
+  public UserResponseDTO unfollow_playlist(@PathVariable Long userId,@PathVariable Long playlistId){
+    return user_service.unfollow_playlist(userId, playlistId);
+  }
+    
 }
