@@ -17,14 +17,17 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
+// import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.NotNull;
+//
 import lombok.AllArgsConstructor;
-import lombok.Data;
+// import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -35,27 +38,31 @@ public class Track {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_track;
 
-  @NotBlank(message = "Please enter a valid title")
+  // @NotBlank(message = "Please enter a valid title")
   private String title;
 
   // @NotBlank(message = "Please enter a valid file path")
   private String file_path;
 
-  @NotNull(message = "Please enter a valid release date")
+  // @NotNull(message = "Please enter a valid release date")
   private Integer release_date;
 
   @ManyToOne
   @JoinColumn(name= "owner_id")
+  @JsonIgnore
   private Artist owner;
 
   @ManyToOne
   @JoinColumn(name = "album_id")
+  @JsonIgnore
   private Album album;
 
  @ManyToMany(mappedBy = "tracks")
+ @JsonIgnore
  private Set<Artist> artists  = new HashSet<>();
 
  @ManyToMany(mappedBy = "liked")
+ @JsonIgnore
  private Set<User> users_liked = new HashSet<>();
  //
  // @ManyToMany(mappedBy = "playlist_tracks")

@@ -2,7 +2,7 @@ package  com.store.app.services;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.security.core.userdetails.User;
@@ -21,7 +21,7 @@ import com.store.app.repositories.ArtistRepository;
 import com.store.app.repositories.UserArtistLinkRepository;
 import com.store.app.repositories.UserRepository;
 
-import jakarta.transaction.Transactional;
+// import jakarta.transaction.Transactional;
 
 /**
  * ArtistService
