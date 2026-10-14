@@ -35,3 +35,4 @@ build/
 ##conections##
 # src/main/resources/application.properties
 ./.evn.sh
+./uploads/
