@@ -13,7 +13,7 @@ import com.store.app.entities.UserArtistLink;
 @Repository
 public interface UserArtistLinkRepository extends JpaRepository<UserArtistLink,Long>{
 
-  UserArtistLink findByUser(User user);
+  Optional<UserArtistLink> findByUser(User user);
   Optional<UserArtistLink> findByUserAndArtist(User user, Artist artist);
   
 }
