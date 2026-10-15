@@ -154,8 +154,8 @@ public class UserService implements UserDetailsService  {
       user.getFollowed_Artists().add(artist);
     }
     
-    User user = user_repo.save(user);
-    return toDto(user);
+    User user_saved = user_repo.save(user);
+    return toDto(user_saved);
   }
 
   public UserResponseDTO unfollow_artist(Long userId, Long artistId){
@@ -163,8 +163,8 @@ public class UserService implements UserDetailsService  {
     Artist artist = artist_service.getById(artistId);
 
     user.getFollowed_Artists().remove(artist);
-    User user =  user_repo.save(user);
-    return toDto(user);
+    User user_saved =  user_repo.save(user);
+    return toDto(user_saved);
   }
 
   @Transactional
