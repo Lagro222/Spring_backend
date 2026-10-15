@@ -1,10 +1,21 @@
 package com.store.app.services;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.store.app.DTOs.albumDTO.HelperAlbumDTO;
 import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
@@ -39,6 +50,10 @@ public class TrackService {
   public final UserArtistLinkRepository link_repo;
   public final ArtistRepository artist_repo;
   public final UserRepository user_repo;
+  private final ResourceLoader resourceLoader;
+
+  @Value("${app.upload.dir}")
+  private String uploadDir;
   // public final ArtistService artist_service;
   // public final UserService userService;
 
@@ -159,5 +174,38 @@ public class TrackService {
 
     return toDTO(target_track);
   }
+
+  public TrackResponseDTO uploadAudio(User current_user,MultipartFile file,Integer realeseDate,String title){
+        
+      if(file.isEmpty()){
+        throw new IllegalArgumentException("file is is empty");
+      }
+
+      UserArtistLink userlink = link_repo.findByUser(current_user).orElseThrow(() -> new RuntimeException("no such user "));
+      Artist artist = userlink.getArtist();
+
+      String safeTitle = title.replaceAll("[^a-zA-Z0-9]", "_") + ".mp3";
+      Path dir = Paths.get(uploadDir,artist.getName());
+      Path destination = dir.resolve(safeTitle);
+      
+      try {
+        Files.createDirectories(dir);
+        Files.copy(file.getInputStream(), destination,StandardCopyOption.REPLACE_EXISTING);
+          
+      } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException("uploading failed !!");
+      }
+       
+      Track track = new Track();
+      track.setOwner(artist);
+      track.setTitle(file.getName());
+      track.setRelease_date(realeseDate);
+      track.setFile_path(destination.toString());
+
+      return toDTO(track_repository.save(track));
+
+
+    }
   
 }

@@ -3,6 +3,7 @@ package com.store.app.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 // import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.services.TrackService;
+// import com.sun.java.swing.action.OkAction;
 
 import jakarta.validation.Valid;
 
@@ -67,6 +70,17 @@ public class TrackController {
   @PostMapping("/{trackId}/album/{albumID}")
   public TrackResponseDTO addAlbum(@PathVariable Long trackId, @PathVariable Long albumID,@AuthenticationPrincipal User current_user){
     return track_service.assignAlbum(trackId, albumID,current_user);
+  }
+
+  @PostMapping("/upload")
+  public TrackResponseDTO uploadAudio(
+      @AuthenticationPrincipal User curret_user, 
+      @RequestParam("file") MultipartFile file,
+      @RequestParam Integer releaseDate,
+      @RequestParam String title
+      ){
+      
+    return track_service.uploadAudio(curret_user, file, releaseDate,title);
   }
   //
   // @PostMapping("/{trackID}/like/{userId}")
