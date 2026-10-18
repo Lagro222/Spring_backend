@@ -1,8 +1,11 @@
 package com.store.app.controllers;
 
+// import java.net.http.HttpHeaders;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.core.io.Resource; 
 import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 // import com.store.app.entities.Track;
@@ -23,6 +26,7 @@ import com.store.app.entities.User;
 import com.store.app.services.TrackService;
 // import com.sun.java.swing.action.OkAction;
 
+// import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 
 /**
@@ -82,7 +86,17 @@ public class TrackController {
       
     return track_service.uploadAudio(curret_user, file, releaseDate,title);
   }
-  //
+
+  @GetMapping("/play/{id}")
+  public ResponseEntity<Resource> playAudio(@PathVariable Long id){
+
+    Resource resource = track_service.LoadAudio(id);
+    return ResponseEntity.ok()
+      .contentType(MediaType.parseMediaType("audio/mpeg"))
+      .header(HttpHeaders.CONTENT_DISPOSITION,"inline")
+      .body(resource);
+  }
+
   // @PostMapping("/{trackID}/like/{userId}")
   // public Track likeTrack(@PathVariable Long trackId, @PathVariable Long userId){
   //   return track_service.likeTrack(trackId, userId);

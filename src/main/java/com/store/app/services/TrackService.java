@@ -1,18 +1,21 @@
 package com.store.app.services;
 
-import java.io.File;
+// import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Date;
-import java.time.LocalDateTime;
+// import java.sql.Date;
+// import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+// import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.Resource; 
+import org.springframework.core.io.UrlResource;
+// import org.springframework.security.core.annotation.AuthenticationPrincipal;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +37,7 @@ import com.store.app.repositories.TrackRepository;
 import com.store.app.repositories.UserArtistLinkRepository;
 import com.store.app.repositories.UserRepository;
 
+// import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -50,7 +54,7 @@ public class TrackService {
   public final UserArtistLinkRepository link_repo;
   public final ArtistRepository artist_repo;
   public final UserRepository user_repo;
-  private final ResourceLoader resourceLoader;
+  // private final ResourceLoader resourceLoader;
 
   @Value("${app.upload.dir}")
   private String uploadDir;
@@ -80,6 +84,10 @@ public class TrackService {
         artists
         
     );
+  }
+
+  private UserArtistLink getLinkedUser(User user){
+    return link_repo.findByUser(user).orElseThrow(() -> new RuntimeException("no such aritst linked to this user"));
   }
   //functions for GET
   
@@ -113,7 +121,7 @@ public class TrackService {
   public TrackResponseDTO create_track(TrackRequestDTO new_track, User current_user){
 
     Track track = new Track();
-    UserArtistLink link = link_repo.findByUser(current_user);
+    UserArtistLink link = getLinkedUser(current_user);
     track.setTitle(new_track.getTitle());
     track.setRelease_date(new_track.getRelease_date());
     track.setOwner(link.getArtist());
@@ -207,5 +215,31 @@ public class TrackService {
 
 
     }
+
+    public Resource LoadAudio(Long trackId){
+
+    Track track = findById(trackId);
+
+    if(track.getFile_path() == null){
+      throw new RuntimeException("unexisting audio file");
+    }
+
+    try{
+
+      Resource resource =  new UrlResource(Paths.get(track.getFile_path()).toUri());
+      
+      if(!resource.exists() || !resource.isReadable()){
+        throw new RuntimeException("audio file not found");
+      }
+
+      return resource;
+    }catch(MalformedURLException ex){
+      throw new RuntimeException("invalid file path");
+    }
+
+
+
+
+  }
   
 }
