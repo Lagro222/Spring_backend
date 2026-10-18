@@ -22,5 +22,5 @@ completed the securityConfig;; sept 10
 complete the authontification ;; sept 12
 completed playlist albums and tracks logics ;; sept 29 
 completed the response classes ;; sept 29
-
+completed uplaod and playing features ;; oct 17
 
