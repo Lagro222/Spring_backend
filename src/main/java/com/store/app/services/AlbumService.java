@@ -106,10 +106,8 @@ public class AlbumService {
     
     Album new_album = new Album();
 
-    UserArtistLink link = link_repo.findByUser(current_user);
-
+    UserArtistLink link = link_repo.findByUser(current_user).orElseThrow(() -> new RuntimeException("no such User"));
     
-
     new_album.setTitle(album.getTitle());
     new_album.setReleaseYear(album.getReleaseYear());
     new_album.setOwner(link.getArtist());
