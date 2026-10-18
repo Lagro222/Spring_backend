@@ -1,5 +1,7 @@
 package com.store.app.security;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 // import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +32,8 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
     httpSecurity
-      .csrf(csrf -> csrf.disable())
+      .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+      .csrf(csrf -> csrf.disable()) 
       .exceptionHandling(ex -> ex
           .authenticationEntryPoint((req, res, authException) -> {
             res.setStatus(401);
@@ -40,11 +46,11 @@ public class SecurityConfig {
           
           //public
           .requestMatchers("/auth/**").permitAll()
-          .requestMatchers(HttpMethod.GET,"/tracks/**").permitAll()
-          .requestMatchers(HttpMethod.GET, "/artists/**").permitAll()
-          .requestMatchers(HttpMethod.GET, "/albums/**").permitAll()
-          .requestMatchers(HttpMethod.GET, "/playlists/**").permitAll()
-          .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
+          .requestMatchers(HttpMethod.GET,"/tracks/**").authenticated()
+          .requestMatchers(HttpMethod.GET, "/artists/**").authenticated()
+          .requestMatchers(HttpMethod.GET, "/albums/**").authenticated()
+          .requestMatchers(HttpMethod.GET, "/playlists/**").authenticated()
+          .requestMatchers(HttpMethod.GET, "/users/**").authenticated()
 
           //admin
 
@@ -88,6 +94,28 @@ public class SecurityConfig {
   @Bean
   public AuthenticationManager authenticationManger(AuthenticationConfiguration config) throws Exception{
     return config.getAuthenticationManager(); 
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource(){
+    
+    CorsConfiguration cors_config = new CorsConfiguration();
+    cors_config.setAllowedOrigins(List.of(
+          "http://localhost:5500",   // python http.server
+          "http://127.0.0.1:5500"
+          ));
+    cors_config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    cors_config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+    cors_config.setAllowCredentials(false);
+    // cors_config.setExposedHeaders(List.of("Authorization"));
+ 
+    UrlBasedCorsConfigurationSource  source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", cors_config);
+
+
+    return source;
+
+
   }
 
 
