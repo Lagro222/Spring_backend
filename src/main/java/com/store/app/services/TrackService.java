@@ -185,9 +185,15 @@ public class TrackService {
 
   public TrackResponseDTO uploadAudio(User current_user,MultipartFile file,Integer realeseDate,String title){
         
-      if(file.isEmpty()){
+    
+    if(!file.getOriginalFilename().contains(".mp3")){
+        throw new IllegalArgumentException("file must be mp3 format");
+    }  
+
+    if(file.isEmpty()){
         throw new IllegalArgumentException("file is is empty");
-      }
+    }
+
 
       UserArtistLink userlink = link_repo.findByUser(current_user).orElseThrow(() -> new RuntimeException("no such user "));
       Artist artist = userlink.getArtist();
