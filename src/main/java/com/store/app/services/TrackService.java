@@ -185,7 +185,7 @@ public class TrackService {
 
   public TrackResponseDTO uploadAudio(User current_user,MultipartFile file,Integer realeseDate,String title){
         
-    
+    //lagro : bug any file of any type added into track even if not mp3
     if(!file.getOriginalFilename().contains(".mp3")){
         throw new IllegalArgumentException("file must be mp3 format");
     }  
