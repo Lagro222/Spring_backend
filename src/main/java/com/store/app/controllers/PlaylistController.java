@@ -46,16 +46,15 @@ public class PlaylistController {
   @GetMapping("/search/{name}")
   public List<PlaylistResponseDTO> getByName(@PathVariable String name){
     return playlist_service.getByTitle(name);
-  }
+    }
 
   //postmapping
   @PostMapping("/create")
   public PlaylistResponseDTO create_playlist(
-      @RequestParam(required = false) Long userId,
       @Valid @RequestBody PlaylistRequestDTO new_playlist,
       @AuthenticationPrincipal User current_user
       ){
-    return playlist_service.create_playlist(userId,new_playlist,current_user);  
+    return playlist_service.create_playlist(new_playlist,current_user);  
   }
 
   @PostMapping("/{playlistId}/track/{trackId}")

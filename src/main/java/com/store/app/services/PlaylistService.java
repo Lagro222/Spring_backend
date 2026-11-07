@@ -89,7 +89,7 @@ public class PlaylistService {
   }
 
 
-  public PlaylistResponseDTO create_playlist(Long userId,PlaylistRequestDTO new_playlist , User current_user){
+  public PlaylistResponseDTO create_playlist(PlaylistRequestDTO new_playlist , User current_user){
     
     Playlist playlist = new Playlist();
     
@@ -106,7 +106,6 @@ public class PlaylistService {
     playlist.setType(new_playlist.getPlaylistType());
     playlist.setName(new_playlist.getName());
     playlist.setCollaborative(new_playlist.getIsCollaborative());
-    playlist.setUser(current_user);
     
     playlist_repo.save(playlist);
     System.out.println("playlist owner" + playlist.getUser().getId_user());
