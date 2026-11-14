@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
 import com.store.app.DTOs.playlistDTO.PlaylistResponseDTO;
+import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 // import com.store.app.entities.Playlist;
 import com.store.app.entities.User;
 // import com.store.app.enums.PlaylistType;
@@ -41,6 +42,11 @@ public class PlaylistController {
   @GetMapping("/{id}")
   public PlaylistResponseDTO getById(@PathVariable Long id){
     return playlist_service.getById(id);
+  }
+
+  @GetMapping("/{id}/play")
+  public List<TrackResponseDTO> play(@PathVariable Long id){
+    return playlist_service.getPlaylistTracks(id);
   }
 
   @GetMapping("/search/{name}")
@@ -75,5 +81,6 @@ public class PlaylistController {
       ){
     return playlist_service.update_playlist(id,updated,current_user);
   }
+
 
 }

@@ -1,6 +1,7 @@
 package com.store.app.services;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.store.app.DTOs.playlistDTO.PlaylistRequestDTO;
 import com.store.app.DTOs.playlistDTO.PlaylistResponseDTO;
 import com.store.app.DTOs.tracksDTO.HelperTrackDTO;
+import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Artist;
 // import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
 import com.store.app.entities.Playlist;
@@ -23,6 +25,7 @@ import com.store.app.repositories.PlaylistTrackRepository;
 // import com.store.app.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
+// import jdk.internal.loader.Resource;
 
 /**
  * PlaylistService
@@ -193,6 +196,20 @@ public class PlaylistService {
             ));
 
       return playlist_response;
+    }
+
+
+    public List<TrackResponseDTO> getPlaylistTracks(Long playlistId){
+
+      Playlist playlist = playlist_repo.findById(playlistId).orElseThrow( () -> new RuntimeException("no such playlist!!"));
+
+      return playlist.getTracks()
+        .stream()
+        .filter(pt -> pt.getTrack().getFile_path() != null)
+        .sorted(Comparator.comparing(PlaylistTrack::getPostion))
+        .map(pt -> track_service.toDTO(pt.getTrack()))
+        .collect(Collectors.toList());
+
     }
 
   
