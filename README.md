@@ -127,47 +127,76 @@ http://localhost:8080
 
 ### Authentication
 
-- `POST /auth/register` — register a new user
-- `POST /auth/login` — login and receive JWT
+- `POST /auth/register` — register a new user and receive a JWT token.
+- `POST /auth/login` — log in with email and password and receive a JWT token.
 
 ### Tracks
 
-- `GET /tracks` — get all tracks
-- `GET /tracks/search?id={id}` — get track by ID
-- `GET /tracks/search?title={title}` — search tracks by title
-- `POST /tracks` — create a track
-- `PUT /tracks/update/{id}` — update a track
-- `DELETE /tracks/{id}` — delete a track
-- `POST /tracks/upload` — upload an audio file
-- `GET /tracks/play/{id}` — stream audio
+The `TrackController` manages the music catalogue and audio files.
+
+- `GET /tracks` — returns all tracks.
+- `GET /tracks/search?id={id}` — fetches a single track by ID.
+- `GET /tracks/search?title={title}` — searches tracks by title.
+- `POST /tracks` — creates a new track using a `TrackRequestDTO`.
+- `PUT /tracks/update/{id}` — updates an existing track by ID.
+- `DELETE /tracks/{id}` — deletes a track.
+- `POST /tracks/{trackId}/album/{albumID}` — assigns a track to an album.
+- `POST /tracks/upload` — uploads an audio file with `file`, `releaseDate`, and `title` fields.
+- `GET /tracks/play/{id}` — streams the audio file for a track.
 
 ### Artists
 
-- `GET /artists`
-- `POST /artists`
-- `PUT /artists/{id}`
-- `DELETE /artists/{id}`
+The `ArtistController` handles artist profiles and artist-track relationships.
+
+- `GET /artists` — lists all artists.
+- `GET /artists/{id}` — gets a single artist by ID.
+- `GET /artists/search/{name}` — searches artists by name.
+- `GET /artists/{artistId}/tracks` — returns all tracks associated with an artist.
+- `POST /artists/create` — creates an artist.
+- `POST /artists/{artistId}/track/{trackId}` — links a track to an artist.
+- `POST /artists/{artistId}/album/{albumId}` — links an album to an artist.
+- `PUT /artists/update/{id}` — updates artist information.
+- `DELETE /artists/{id}` — deletes an artist.
 
 ### Albums
 
-- `GET /albums`
-- `POST /albums`
-- `PUT /albums/{id}`
-- `DELETE /albums/{id}`
+The `AlbumController` manages album records and their associations.
+
+- `GET /albums` — lists all albums.
+- `GET /albums/search?id={id}` — retrieves an album by ID.
+- `GET /albums/search?title={title}` — searches albums by title.
+- `POST /albums/create` — creates a new album.
+- `PUT /albums/update/{id}` — updates an album.
+- `DELETE /albums/delete/{id}` — deletes an album.
 
 ### Playlists
 
-- `GET /playlists`
-- `POST /playlists`
-- `PUT /playlists/{id}`
-- `DELETE /playlists/{id}`
+The `PlaylistController` handles user-created playlists and track assignment.
+
+- `GET /playlists` — lists all playlists.
+- `GET /playlists/{id}` — gets a playlist by ID.
+- `GET /playlists/{id}/play` — retrieves the tracks inside a playlist.
+- `GET /playlists/search/{name}` — searches playlists by name.
+- `POST /playlists/create` — creates a playlist.
+- `POST /playlists/{playlistId}/track/{trackId}` — adds a track to a playlist.
+- `PUT /playlists/update/{id}` — updates playlist information.
 
 ### Users
 
-- `GET /users`
-- `POST /users`
-- `PUT /users/{id}`
-- `DELETE /users/{id}`
+The `UserController` handles profile management, likes, follows, and personal library actions.
+
+- `GET /users` — lists all users.
+- `GET /users/search/{name}` — searches users by name.
+- `GET /users/{id}` — gets user details by ID.
+- `GET /users/{id}/liked` — gets tracks liked by a user.
+- `GET /users/{userId}/follow/artists` — gets artists followed by a user.
+- `GET /users/{userId}/follow/playlists` — gets playlists followed by a user.
+- `POST /users/like/{trackId}` — likes a track for the authenticated user.
+- `POST /users/follow/artist/{artistId}` — follows an artist.
+- `POST /users/follow/playlist/{playlistId}` — follows a playlist.
+- `PUT /users/update/{userId}` — updates a user profile.
+- `DELETE /users/{userId}/follow/artist/{artistId}` — unfollows an artist.
+- `DELETE /users/{userId}/unfollow/playlist/{playlistId}` — unfollows a playlist.
 
 ## Security
 
@@ -178,6 +207,7 @@ The app uses Spring Security with JWT-based authentication. Most endpoints requi
 - The project includes upload support for audio files.
 - The upload and playback endpoints rely on the configured `UPLOAD_DIR`.
 - The repository includes a `TODO.md` file, which suggests the project is still evolving and has several planned improvements.
+- The app uses a role-based access model, with authenticated users and admin-specific restrictions configured in the security layer.
 
 ## Contributing
 
@@ -186,4 +216,3 @@ Contributions are welcome. You can create a feature branch, make your changes, a
 ## License
 
 This repository does not currently include an explicit license file. If you plan to publish or distribute this project, it is recommended to add a license such as MIT or Apache 2.0.
-
