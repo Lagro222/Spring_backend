@@ -127,9 +127,14 @@ public boolean UserControlArtist(User user, Artist artist){
     return artist.getTracks();
   }
 
-  public Artist addAlbum(Long artistId, Long albumId) {
+  public Artist addAlbum(Long artistId, Long albumId, User current_user) {
+    
     Artist artist = getById(artistId);
     Album album = album_service.findById(albumId);
+    User user = getUserById(current_user.getId_user());
+
+    if(!UserControlArtist(user, artist)) throw new RuntimeException("you are not allowed to add album to this artist") ;
+
     artist.getAlbums().add(album);
     return artist_repo.save(artist);
   }
