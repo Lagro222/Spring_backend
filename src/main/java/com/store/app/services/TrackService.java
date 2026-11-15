@@ -49,11 +49,13 @@ import lombok.RequiredArgsConstructor;
 public class TrackService {
 
 
-  public final TrackRepository track_repository;
-  public final AlbumService album_service;
-  public final UserArtistLinkRepository link_repo;
-  public final ArtistRepository artist_repo;
-  public final UserRepository user_repo;
+  private final TrackRepository track_repository;
+  private final AlbumService album_service;
+  private final UserArtistLinkRepository link_repo;
+  private final ArtistRepository artist_repo;
+  private final UserRepository user_repo;
+  private final FileStorageService fileStroge_Service;
+
   // private final ResourceLoader resourceLoader;
 
   @Value("${app.upload.dir}")
@@ -186,36 +188,17 @@ public class TrackService {
   public TrackResponseDTO uploadAudio(User current_user,MultipartFile file,Integer realeseDate,String title){
         
     //lagro : bug any file of any type added into track even if not mp3
-    if(!file.getOriginalFilename().contains(".mp3")){
-        throw new IllegalArgumentException("file must be mp3 format");
-    }  
-
-    if(file.isEmpty()){
-        throw new IllegalArgumentException("file is is empty");
-    }
-
-
+   
       UserArtistLink userlink = link_repo.findByUser(current_user).orElseThrow(() -> new RuntimeException("no such user "));
       Artist artist = userlink.getArtist();
-
-      String safeTitle = title.replaceAll("[^a-zA-Z0-9]", "_") + ".mp3";
-      Path dir = Paths.get(uploadDir,artist.getName());
-      Path destination = dir.resolve(safeTitle);
-      
-      try {
-        Files.createDirectories(dir);
-        Files.copy(file.getInputStream(), destination,StandardCopyOption.REPLACE_EXISTING);
-          
-      } catch (Exception e) {
-        e.printStackTrace();
-        throw new RuntimeException("uploading failed !!");
-      }
+  
+      String path = fileStroge_Service.saveAudio(file, artist.getName(), title);   
        
       Track track = new Track();
       track.setOwner(artist);
-      track.setTitle(file.getName());
+      track.setTitle(title);
       track.setRelease_date(realeseDate);
-      track.setFile_path(destination.toString());
+      track.setFile_path(path);
 
       return toDTO(track_repository.save(track));
 
@@ -229,22 +212,8 @@ public class TrackService {
     if(track.getFile_path() == null){
       throw new RuntimeException("unexisting audio file");
     }
-
-    try{
-
-      Resource resource =  new UrlResource(Paths.get(track.getFile_path()).toUri());
-      
-      if(!resource.exists() || !resource.isReadable()){
-        throw new RuntimeException("audio file not found");
-      }
-
-      return resource;
-    }catch(MalformedURLException ex){
-      throw new RuntimeException("invalid file path");
-    }
-
-
-
+    
+    return fileStroge_Service.LoadAudio(track.getFile_path());
 
   }
   
