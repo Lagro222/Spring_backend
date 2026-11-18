@@ -199,9 +199,13 @@ public class PlaylistService {
     }
 
 
-    public List<TrackResponseDTO> getPlaylistTracks(Long playlistId){
+    public List<TrackResponseDTO> getPlaylistTracks(Long playlistId, User user){
 
       Playlist playlist = playlist_repo.findById(playlistId).orElseThrow( () -> new RuntimeException("no such playlist!!"));
+
+      if(!playlist.getUser().getId_user().equals(user.getId_user()) && playlist.getType() == PlaylistType.USER ){
+        throw new RuntimeException("playing denied not a Global playlist you need to be the owner");
+      }
 
       return playlist.getTracks()
         .stream()

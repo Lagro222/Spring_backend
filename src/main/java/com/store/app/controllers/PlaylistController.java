@@ -45,8 +45,8 @@ public class PlaylistController {
   }
 
   @GetMapping("/{id}/play")
-  public List<TrackResponseDTO> play(@PathVariable Long id){
-    return playlist_service.getPlaylistTracks(id);
+  public List<TrackResponseDTO> play(@PathVariable Long id, @AuthenticationPrincipal User current_user){
+    return playlist_service.getPlaylistTracks(id,current_user);
   }
 
   @GetMapping("/search/{name}")
