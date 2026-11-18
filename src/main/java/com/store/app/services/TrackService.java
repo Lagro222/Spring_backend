@@ -1,11 +1,11 @@
 package com.store.app.services;
 
-// import java.io.File;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+// // import java.io.File;
+// import java.net.MalformedURLException;
+// import java.nio.file.Files;
+// import java.nio.file.Path;
+// import java.nio.file.Paths;
+// import java.nio.file.StandardCopyOption;
 // import java.sql.Date;
 // import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 // import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.Resource; 
-import org.springframework.core.io.UrlResource;
+// import org.springframework.core.io.UrlResource;
 // import org.springframework.security.core.annotation.AuthenticationPrincipal;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -215,6 +215,14 @@ public class TrackService {
     
     return fileStroge_Service.LoadAudio(track.getFile_path());
 
+  }
+
+  public List<TrackResponseDTO> getPlayable(){
+    return track_repository.findAll()
+      .stream()
+      .filter(t -> t.getFile_path() != null)
+      .map(t -> toDTO(t))
+      .collect(Collectors.toList());
   }
   
 }

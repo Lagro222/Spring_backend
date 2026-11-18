@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource; 
 import com.store.app.DTOs.tracksDTO.TrackRequestDTO;
 import com.store.app.DTOs.tracksDTO.TrackResponseDTO;
+import com.store.app.entities.Track;
 // import com.store.app.entities.Track;
 import com.store.app.entities.User;
 import com.store.app.services.TrackService;
@@ -96,6 +97,13 @@ public class TrackController {
       .header(HttpHeaders.CONTENT_DISPOSITION,"inline")
       .body(resource);
   }
+
+  @GetMapping("/playable")
+  public List<TrackResponseDTO> playble_tracks(){
+    return track_service.getPlayable();
+  }
+
+  
 
   // @PostMapping("/{trackID}/like/{userId}")
   // public Track likeTrack(@PathVariable Long trackId, @PathVariable Long userId){
