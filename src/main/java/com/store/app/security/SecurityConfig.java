@@ -102,7 +102,10 @@ public class SecurityConfig {
     CorsConfiguration cors_config = new CorsConfiguration();
     cors_config.setAllowedOrigins(List.of(
           "http://localhost:5500",   // python http.server
-          "http://127.0.0.1:5500"
+          "http://127.0.0.1:5500",
+          "http://192.168.1.142:4200",
+          "http://localhost:4200",
+          "http://192.168.43.252:4200"
           ));
     cors_config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     cors_config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
